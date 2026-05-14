@@ -371,27 +371,6 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
             <div class="field"><label>Área</label><select id="f-area"><option value="">Seleccionar…</option></select></div>
             <div class="field"><label>Responsable</label><select id="f-resp"><option value="">Seleccionar…</option></select></div>
           </div>
-          <div class="field">
-            <label>Lote(s) asignados</label>
-            <div style="position:relative" id="lotes-selector-wrap">
-              <button type="button" id="lotes-btn" onclick="toggleLotesDD()" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:13px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;transition:all .2s">
-                <span id="lotes-btn-label">Seleccionar lotes…</span>
-                <svg id="lotes-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-              <div id="lotes-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-panel);border:1px solid var(--border-hover);border-radius:var(--r);z-index:200;box-shadow:0 10px 30px rgba(0,0,0,.5);overflow:hidden">
-                <div style="padding:8px;border-bottom:1px solid var(--border-base)">
-                  <input type="text" id="lotes-search" placeholder="Buscar lote, módulo o cultivo…" oninput="renderLotesDD()" style="width:100%;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:13px;font-family:var(--font);color:var(--text-main);outline:none;transition:border-color .2s">
-                </div>
-                <div id="lotes-dd-selall" style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border-base);cursor:pointer;background:var(--bg-base)" onclick="toggleTodosLotesDD()">
-                  <input type="checkbox" id="lotes-chk-all" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;flex-shrink:0" onclick="event.stopPropagation()">
-                  <span style="font-size:12px;font-weight:600;color:var(--text-sec)">Seleccionar todos</span>
-                  <span id="lotes-total-badge" style="margin-left:auto;font-size:11px;color:var(--text-muted);font-family:var(--mono)"></span>
-                </div>
-                <div id="lotes-dd-list" style="max-height:280px;overflow-y:auto"></div>
-              </div>
-            </div>
-            <div id="lotes-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
-          </div>
           <div class="fsep">Trabajo del día</div>
           <div class="row3">
             <div class="field"><label>Tipo de personal</label>
@@ -400,7 +379,30 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
             <div class="field"><label>Actividad</label><select id="f-act"><option value="">Seleccionar…</option></select></div>
             <div class="field"><label>N° personas</label><input type="number" id="f-np" min="1" max="999" placeholder="0"></div>
           </div>
-          <div class="field" style="max-width:170px"><label>Hora de inicio</label><input type="time" id="f-hora"></div>
+          <div class="row2">
+            <div class="field">
+              <label>Lote(s)</label>
+              <div style="position:relative" id="lotes-selector-wrap">
+                <button type="button" id="lotes-btn" onclick="toggleLotesDD()" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:13px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;transition:all .2s">
+                  <span id="lotes-btn-label">Seleccionar lotes…</span>
+                  <svg id="lotes-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div id="lotes-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-panel);border:1px solid var(--border-hover);border-radius:var(--r);z-index:200;box-shadow:0 10px 30px rgba(0,0,0,.5);overflow:hidden">
+                  <div style="padding:8px;border-bottom:1px solid var(--border-base)">
+                    <input type="text" id="lotes-search" placeholder="Buscar lote o cultivo…" oninput="renderLotesDD()" style="width:100%;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:13px;font-family:var(--font);color:var(--text-main);outline:none">
+                  </div>
+                  <div onclick="toggleTodosLotesDD()" style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border-base);cursor:pointer;background:var(--bg-base)">
+                    <input type="checkbox" id="lotes-chk-all" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;flex-shrink:0" onclick="event.stopPropagation()">
+                    <span style="font-size:12px;font-weight:600;color:var(--text-sec)">Seleccionar todos</span>
+                    <span id="lotes-total-badge" style="margin-left:auto;font-size:11px;color:var(--text-muted);font-family:var(--mono)"></span>
+                  </div>
+                  <div id="lotes-dd-list" style="max-height:260px;overflow-y:auto"></div>
+                </div>
+              </div>
+              <div id="lotes-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+            </div>
+            <div class="field"><label>Hora de inicio</label><input type="time" id="f-hora"></div>
+          </div>
           <div class="field"><label>Observaciones (Opcional)</label><textarea id="f-obs" placeholder="Condiciones del campo, metas, incidencias…"></textarea></div>
           <div id="reg-err" class="alert alert-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="reg-err-t">Completa todos los campos.</span></div>
           <div id="reg-ok" class="alert alert-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Registro guardado y sincronizado.</div>
@@ -876,76 +878,56 @@ function cerrarLotesDD(){
 
 function renderLotesDD(){
   const q = (document.getElementById('lotes-search')?.value || '').toLowerCase().trim();
-  const grupos = getGruposModulo();
   const list = document.getElementById('lotes-dd-list');
   if(!list) return;
 
-  const totalLotes = grupos.reduce((s,g) => s+g.lotes.length, 0);
-  const badge = document.getElementById('lotes-total-badge');
-  if(badge) badge.textContent = totalLotes + ' lotes en total';
+  // Lista plana de todos los lotes con referencia de módulo/cultivo
+  const grupos = getGruposModulo();
+  const todosLotes = grupos.flatMap(g => g.lotes.map(l => ({
+    n: l.n, cult: l.cult, ha: l.ha,
+    modulo: g.modulo, etapa: g.etapa
+  }))).sort((a,b) => a.n - b.n);
 
-  // Actualizar checkbox "seleccionar todos"
+  const filtered = q ? todosLotes.filter(l =>
+    String(l.n).includes(q) ||
+    (l.cult||'').toLowerCase().includes(q) ||
+    (l.modulo||'').toLowerCase().includes(q) ||
+    (l.etapa||'').toLowerCase().includes(q)
+  ) : todosLotes;
+
+  const badge = document.getElementById('lotes-total-badge');
+  if(badge) badge.textContent = todosLotes.length + ' lotes';
+
   const chkAll = document.getElementById('lotes-chk-all');
   if(chkAll){
-    const selCount = S.lotes.length;
-    chkAll.checked = selCount === totalLotes && totalLotes > 0;
-    chkAll.indeterminate = selCount > 0 && selCount < totalLotes;
+    chkAll.checked = filtered.length > 0 && filtered.every(l => isLoteSel(l.n));
+    chkAll.indeterminate = filtered.some(l => isLoteSel(l.n)) && !chkAll.checked;
   }
 
-  if(!grupos.length){
-    list.innerHTML = '<div style="padding:16px;text-align:center;font-size:12px;color:var(--text-muted)">Sin cultivos configurados. Ve a Configuración → Cultivos.</div>';
+  if(!todosLotes.length){
+    list.innerHTML = '<div style="padding:16px;text-align:center;font-size:12px;color:var(--text-muted)">Sin cultivos. Ve a Configuración → Cultivos.</div>';
+    return;
+  }
+  if(!filtered.length){
+    list.innerHTML = `<div style="padding:14px;text-align:center;font-size:12px;color:var(--text-muted)">Sin resultados para "${q}"</div>`;
     return;
   }
 
-  let html = '';
-  grupos.forEach(g => {
-    const filteredLotes = q ? g.lotes.filter(l =>
-      String(l.n).includes(q) ||
-      (l.cult||'').toLowerCase().includes(q) ||
-      (g.modulo||'').toLowerCase().includes(q) ||
-      (g.etapa||'').toLowerCase().includes(q)
-    ) : g.lotes;
-
-    if(!filteredLotes.length) return;
-
-    const modSel = isModSel(g);
-    const modIndet = isModIndet(g);
-    const selCount = g.lotes.filter(l => isLoteSel(l.n)).length;
-
-    html += `<div style="border-bottom:1px solid var(--border-base)">
-      <div onclick="toggleModuloDD('${g.modulo.replace(/'/g,"\\'")}','${g.etapa.replace(/'/g,"\\'")}',event)" style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;background:${modSel?'rgba(16,185,129,.08)':'var(--bg-base)'};transition:background .12s" onmouseover="this.style.background='rgba(16,185,129,.05)'" onmouseout="this.style.background='${modSel?'rgba(16,185,129,.08)':'var(--bg-base)'}'">
-        <input type="checkbox" id="chk-mod-${g.modulo.replace(/[^a-zA-Z0-9]/g,'-')}" ${modSel?'checked':''} onclick="event.stopPropagation();toggleModuloDD('${g.modulo.replace(/'/g,"\\'")}','${g.etapa.replace(/'/g,"\\'")}',event)" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;flex-shrink:0">
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:600;color:var(--text-main)">${g.modulo}</div>
-          <div style="font-size:11px;color:var(--text-label)">${g.etapa} &middot; ${g.lotes.length} lote${g.lotes.length!==1?'s':''}</div>
-        </div>
-        ${selCount>0?`<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--primary-bg);border:1px solid var(--primary-b);color:var(--text-accent);font-family:var(--mono);font-weight:600">${selCount}/${g.lotes.length}</span>`:''}
-      </div>`;
-
-    filteredLotes.forEach(l => {
-      const sel = isLoteSel(l.n);
-      html += `<div onclick="toggleLoteDD(${l.n},'${g.modulo.replace(/'/g,"\\'")}','${g.etapa.replace(/'/g,"\\'")}',event)" style="display:flex;align-items:center;gap:10px;padding:8px 14px 8px 36px;cursor:pointer;background:${sel?'rgba(16,185,129,.06)':'transparent'};transition:background .12s;border-top:0.5px solid var(--border-base)" onmouseover="this.style.background='var(--bg-input)'" onmouseout="this.style.background='${sel?'rgba(16,185,129,.06)':'transparent'}'">
-        <input type="checkbox" ${sel?'checked':''} onclick="event.stopPropagation();toggleLoteDD(${l.n},'${g.modulo.replace(/'/g,"\\'")}','${g.etapa.replace(/'/g,"\\'")}',event)" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;flex-shrink:0">
-        <span style="font-size:13px;font-weight:700;color:var(--text-main);width:36px;flex-shrink:0">${l.n}</span>
-        <span style="font-size:12px;color:var(--text-sec);flex:1">${l.cult}</span>
-        ${l.ha?`<span style="font-size:11px;color:var(--text-muted);font-family:var(--mono)">${parseFloat(l.ha).toFixed(2)} ha</span>`:''}
-      </div>`;
-    });
-
-    html += '</div>';
-  });
-
-  if(!html){
-    html = `<div style="padding:16px;text-align:center;font-size:12px;color:var(--text-muted)">Sin resultados para "${q}"</div>`;
-  }
-
-  list.innerHTML = html;
-
-  // Aplicar indeterminate a checkboxes de módulo
-  grupos.forEach(g => {
-    const chk = document.getElementById('chk-mod-'+g.modulo.replace(/[^a-zA-Z0-9]/g,'-'));
-    if(chk) chk.indeterminate = isModIndet(g);
-  });
+  list.innerHTML = filtered.map(l => {
+    const sel = isLoteSel(l.n);
+    return `<div onclick="toggleLoteDD(${l.n},'${l.modulo.replace(/'/g,"\\'")}','${l.etapa.replace(/'/g,"\\'")}',event)"
+      style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;border-bottom:0.5px solid var(--border-base);background:${sel?'rgba(16,185,129,.06)':'transparent'};transition:background .12s"
+      onmouseover="if(!${sel})this.style.background='var(--bg-input)'"
+      onmouseout="this.style.background='${sel?'rgba(16,185,129,.06)':'transparent'}'">
+      <input type="checkbox" ${sel?'checked':''} onclick="event.stopPropagation();toggleLoteDD(${l.n},'${l.modulo.replace(/'/g,"\\'")}','${l.etapa.replace(/'/g,"\\'")}',event)" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;flex-shrink:0">
+      <span style="font-size:13px;font-weight:700;color:var(--text-main);width:34px;flex-shrink:0">${l.n}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;color:var(--text-sec)">${l.cult||'—'}</div>
+        <div style="font-size:11px;color:var(--text-muted)">${l.modulo}${l.etapa?' · '+l.etapa:''}</div>
+      </div>
+      ${l.ha?`<span style="font-size:11px;color:var(--text-muted);font-family:var(--mono);flex-shrink:0">${parseFloat(l.ha).toFixed(2)} ha</span>`:''}
+    </div>`;
+  }).join('');
 }
 
 function toggleModuloDD(modulo, etapa, event){
@@ -978,16 +960,19 @@ function toggleLoteDD(n, modulo, etapa, event){
 }
 
 function toggleTodosLotesDD(){
-  const grupos = getGruposModulo();
   const q = (document.getElementById('lotes-search')?.value || '').toLowerCase().trim();
-  const filtered = q ? grupos.map(g => ({...g, lotes: g.lotes.filter(l => String(l.n).includes(q)||(l.cult||'').toLowerCase().includes(q)||(g.modulo||'').toLowerCase().includes(q))})).filter(g=>g.lotes.length) : grupos;
-  const allNums = filtered.flatMap(g => g.lotes.map(l => l.n));
-  const allSel = allNums.every(n => S.lotes.includes(n));
-  if(allSel){ S.lotes = S.lotes.filter(n => !allNums.includes(n)); }
-  else{ allNums.forEach(n => { if(!S.lotes.includes(n)) S.lotes.push(n); }); S.lotes.sort((a,b)=>a-b); }
-  renderLotesDD();
-  renderLotesBtnLabel();
-  renderLotesTags();
+  const grupos = getGruposModulo();
+  const todos = grupos.flatMap(g => g.lotes.map(l => ({n:l.n, modulo:g.modulo, etapa:g.etapa})));
+  const filtered = q ? todos.filter(l =>
+    String(l.n).includes(q) ||
+    (l.modulo||'').toLowerCase().includes(q) ||
+    (l.etapa||'').toLowerCase().includes(q)
+  ) : todos;
+  const nums = filtered.map(l => l.n);
+  const allSel = nums.every(n => S.lotes.includes(n));
+  if(allSel){ S.lotes = S.lotes.filter(n => !nums.includes(n)); }
+  else{ nums.forEach(n => { if(!S.lotes.includes(n)) S.lotes.push(n); }); S.lotes.sort((a,b)=>a-b); }
+  renderLotesDD(); renderLotesBtnLabel(); renderLotesTags();
 }
 
 function renderLotesBtnLabel(){
