@@ -1437,6 +1437,8 @@ function renderConfig(){
 // Mantener renderMaestros como no-op (ya no se usa como bloque único)
 function renderMaestros(){ if(cfgSeccionActiva) goConfigSection(cfgSeccionActiva); }
 function switchTab(){} // deprecated
+
+function ensureMaestrosDB(){
   if(!DB.maestros.cultivos)DB.maestros.cultivos=[];
   // Migrar lotes → cultivos si existían strings
   if(DB.maestros.lotes&&!DB.maestros.cultivos.length){
@@ -1714,10 +1716,6 @@ function importarCultivos(input){
     input.value='';
   };
   reader.readAsArrayBuffer(file);
-}
-
-function getLotesParaChips(){
-  return(DB.maestros.cultivos||[]).map(c=>(c.etapa?c.etapa+' \u2014 ':'')+(c.modulo?c.modulo+' \u2014 ':'')+`Lote ${c.lote||'?'} (${c.cultivo||'sin cultivo'})`);
 }
 
 
