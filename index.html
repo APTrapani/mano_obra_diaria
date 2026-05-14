@@ -371,7 +371,59 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
             <div class="field"><label>Área</label><select id="f-area"><option value="">Seleccionar…</option></select></div>
             <div class="field"><label>Responsable</label><select id="f-resp"><option value="">Seleccionar…</option></select></div>
           </div>
-          <div class="field"><label>Lote(s) asignados</label><div class="chips" id="lotes-chips"></div></div>
+          <div class="field">
+            <label>Lote(s) asignados</label>
+            <!-- Selector en cascada: Etapa → Cultivo → Módulo → Lotes -->
+            <div id="cascada-wrap" style="background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);padding:1rem;display:flex;flex-direction:column;gap:.85rem">
+
+              <!-- Paso 1: Etapa -->
+              <div>
+                <div style="font-size:10px;font-weight:600;color:var(--text-label);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Etapa</div>
+                <div id="casc-etapas" style="display:flex;flex-wrap:wrap;gap:6px">
+                  <span style="font-size:12px;color:var(--text-muted)">Sin cultivos configurados.</span>
+                </div>
+              </div>
+
+              <!-- Paso 2: Cultivo (aparece al elegir Etapa) -->
+              <div id="casc-cultivo-wrap" style="display:none">
+                <div style="font-size:10px;font-weight:600;color:var(--text-label);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Cultivo</div>
+                <div id="casc-cultivos" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+              </div>
+
+              <!-- Paso 3: Módulo (aparece al elegir Cultivo) -->
+              <div id="casc-modulo-wrap" style="display:none">
+                <div style="font-size:10px;font-weight:600;color:var(--text-label);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Módulo</div>
+                <div id="casc-modulos" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+              </div>
+
+              <!-- Paso 4: Lotes (dropdown con buscador + checkboxes) -->
+              <div id="casc-lote-wrap" style="display:none">
+                <div style="font-size:10px;font-weight:600;color:var(--text-label);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem">Lotes</div>
+                <div style="position:relative">
+                  <button type="button" id="casc-lote-btn" onclick="toggleLoteDropdown()" style="width:100%;padding:8px 12px;background:var(--bg-panel);border:1px solid var(--border-hover);border-radius:var(--r);font-size:13px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left">
+                    <span id="casc-lote-label">Seleccionar lotes…</span>
+                    <svg id="casc-lote-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+                  </button>
+                  <div id="casc-lote-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-panel);border:1px solid var(--border-hover);border-radius:var(--r);z-index:100;box-shadow:0 8px 24px rgba(0,0,0,.4);overflow:hidden">
+                    <!-- Buscador -->
+                    <div style="padding:8px;border-bottom:1px solid var(--border-base)">
+                      <input type="text" id="casc-lote-search" placeholder="Buscar lote…" oninput="filtrarLotesDropdown()" style="width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:6px;font-size:12px;font-family:var(--font);color:var(--text-main);outline:none">
+                    </div>
+                    <!-- Seleccionar todo -->
+                    <div style="padding:8px 12px;border-bottom:1px solid var(--border-base);display:flex;align-items:center;gap:8px;cursor:pointer" onclick="toggleTodosLotes()">
+                      <input type="checkbox" id="casc-chk-todos" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px" onclick="event.stopPropagation()">
+                      <span style="font-size:12px;font-weight:600;color:var(--text-sec)">Seleccionar todos</span>
+                    </div>
+                    <!-- Lista de lotes -->
+                    <div id="casc-lote-list" style="max-height:220px;overflow-y:auto;padding:4px 0"></div>
+                  </div>
+                </div>
+                <!-- Resumen de seleccionados -->
+                <div id="casc-lote-tags" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px"></div>
+              </div>
+
+            </div>
+          </div>
           <div class="fsep">Trabajo del día</div>
           <div class="row3">
             <div class="field"><label>Tipo de personal</label>
@@ -791,22 +843,205 @@ function initForm(){
   pSel('f-area',DB.maestros.areas);
   pSel('f-resp',DB.maestros.responsables);
   pSel('f-act',DB.maestros.actividades);
-  S.lotes=[];renderChips();
+  S.lotes=[];initCascada();
   document.getElementById('reg-err').classList.remove('show');
   document.getElementById('reg-ok').classList.remove('show');
   document.getElementById('reg-sav').style.display='none';
 }
 
-function renderChips(){
-  const wrap=document.getElementById('lotes-chips');
-  const lotes=getLotesParaChips();
-  if(!lotes.length){wrap.innerHTML='<span style="font-size:12px;color:var(--text-muted)">Sin cultivos. Agrégalos en Configuración → Cultivos.</span>';return;}
-  wrap.innerHTML=lotes.map(l=>
-    `<div class="chip${S.lotes.includes(l)?' sel':''}" onclick="toggleChip('${l.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')"> ${l}</div>`
+/* ═══════════ SELECTOR EN CASCADA ═══════════
+   Estado: cascada.etapa → cascada.cultivo → cascada.modulo → S.lotes (array de ints lote)
+*/
+const cascada = { etapa: null, cultivo: null, modulo: null };
+
+function initCascada(){
+  cascada.etapa = null; cascada.cultivo = null; cascada.modulo = null;
+  S.lotes = [];
+  renderCascadaEtapas();
+  document.getElementById('casc-cultivo-wrap').style.display = 'none';
+  document.getElementById('casc-modulo-wrap').style.display = 'none';
+  document.getElementById('casc-lote-wrap').style.display = 'none';
+  cerrarLoteDropdown();
+}
+
+// ── Helpers para obtener valores únicos de cultivos filtrados ──
+function getCultivos(){ return DB.maestros.cultivos || []; }
+
+function getEtapasUnicas(){
+  return [...new Set(getCultivos().map(c => c.etapa).filter(Boolean))].sort();
+}
+
+function getCultivosDeEtapa(etapa){
+  return [...new Set(getCultivos().filter(c => c.etapa === etapa).map(c => c.cultivo).filter(Boolean))].sort();
+}
+
+function getModulosDeEtapaCultivo(etapa, cultivo){
+  return [...new Set(getCultivos().filter(c => c.etapa === etapa && c.cultivo === cultivo).map(c => c.modulo).filter(Boolean))].sort();
+}
+
+function getLotesFiltrados(etapa, cultivo, modulo){
+  return getCultivos().filter(c =>
+    c.etapa === etapa && c.cultivo === cultivo && c.modulo === modulo && c.lote != null
+  ).sort((a,b) => (parseInt(a.lote)||0) - (parseInt(b.lote)||0));
+}
+
+// ── Renderizado de botones de selección ──
+function mkCascBtn(label, selected, onclick){
+  const sel = selected === label;
+  return `<button type="button" onclick="${onclick}" style="padding:5px 14px;border-radius:20px;font-size:12px;font-weight:500;font-family:var(--font);cursor:pointer;transition:all .2s;border:1px solid ${sel?'var(--primary-b)':'var(--border-hover)'};background:${sel?'var(--primary-bg)':'var(--bg-panel)'};color:${sel?'var(--text-accent)':'var(--text-sec)'}">${label}</button>`;
+}
+
+function renderCascadaEtapas(){
+  const etapas = getEtapasUnicas();
+  const wrap = document.getElementById('casc-etapas');
+  if(!etapas.length){
+    wrap.innerHTML = '<span style="font-size:12px;color:var(--text-muted)">Sin cultivos configurados. Ve a Configuración → Cultivos.</span>';
+    return;
+  }
+  wrap.innerHTML = etapas.map(e => mkCascBtn(e, cascada.etapa, `selEtapa('${e.replace(/'/g,"\\'")}')`)).join('');
+}
+
+function selEtapa(etapa){
+  cascada.etapa = etapa; cascada.cultivo = null; cascada.modulo = null; S.lotes = [];
+  renderCascadaEtapas();
+  // Mostrar cultivos
+  const cultivos = getCultivosDeEtapa(etapa);
+  const wrap = document.getElementById('casc-cultivos');
+  wrap.innerHTML = cultivos.map(c => mkCascBtn(c, null, `selCultivo('${c.replace(/'/g,"\\'")}')`)).join('');
+  document.getElementById('casc-cultivo-wrap').style.display = '';
+  document.getElementById('casc-modulo-wrap').style.display = 'none';
+  document.getElementById('casc-lote-wrap').style.display = 'none';
+  cerrarLoteDropdown();
+  actualizarTagsLotes();
+}
+
+function selCultivo(cultivo){
+  cascada.cultivo = cultivo; cascada.modulo = null; S.lotes = [];
+  // Re-render cultivos con nuevo seleccionado
+  const cultivos = getCultivosDeEtapa(cascada.etapa);
+  document.getElementById('casc-cultivos').innerHTML = cultivos.map(c => mkCascBtn(c, cascada.cultivo, `selCultivo('${c.replace(/'/g,"\\'")}')`)).join('');
+  // Mostrar módulos
+  const modulos = getModulosDeEtapaCultivo(cascada.etapa, cultivo);
+  const wrap = document.getElementById('casc-modulos');
+  wrap.innerHTML = modulos.map(m => mkCascBtn(m, null, `selModulo('${m.replace(/'/g,"\\'")}')`)).join('');
+  document.getElementById('casc-modulo-wrap').style.display = '';
+  document.getElementById('casc-lote-wrap').style.display = 'none';
+  cerrarLoteDropdown();
+  actualizarTagsLotes();
+}
+
+function selModulo(modulo){
+  cascada.modulo = modulo; S.lotes = [];
+  // Re-render módulos con nuevo seleccionado
+  const modulos = getModulosDeEtapaCultivo(cascada.etapa, cascada.cultivo);
+  document.getElementById('casc-modulos').innerHTML = modulos.map(m => mkCascBtn(m, cascada.modulo, `selModulo('${m.replace(/'/g,"\\'")}')`)).join('');
+  // Mostrar dropdown de lotes
+  document.getElementById('casc-lote-wrap').style.display = '';
+  renderLotesDropdown();
+  actualizarTagsLotes();
+}
+
+// ── Dropdown de Lotes ──
+function renderLotesDropdown(){
+  const lotes = getLotesFiltrados(cascada.etapa, cascada.cultivo, cascada.modulo);
+  const q = (document.getElementById('casc-lote-search')?.value || '').toLowerCase();
+  const filtered = q ? lotes.filter(c => String(c.lote||'').toLowerCase().includes(q) || (c.cultivo||'').toLowerCase().includes(q)) : lotes;
+  const list = document.getElementById('casc-lote-list');
+  if(!filtered.length){
+    list.innerHTML = '<div style="padding:12px;font-size:12px;color:var(--text-muted);text-align:center">Sin lotes disponibles.</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(c => {
+    const loteNum = parseInt(c.lote);
+    const sel = S.lotes.includes(loteNum);
+    return `<div onclick="toggleLote(${loteNum})" style="display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;transition:background .12s;${sel?'background:rgba(16,185,129,.06)':''}" onmouseover="this.style.background='var(--bg-input)'" onmouseout="this.style.background='${sel?'rgba(16,185,129,.06)':'transparent'}'">
+      <input type="checkbox" ${sel?'checked':''} onclick="event.stopPropagation();toggleLote(${loteNum})" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;flex-shrink:0">
+      <span style="font-size:13px;font-weight:600;color:var(--text-main);width:32px;flex-shrink:0">${c.lote}</span>
+      <span style="font-size:12px;color:var(--text-sec)">${c.cultivo||''}</span>
+    </div>`;
+  }).join('');
+  // Actualizar checkbox "todos"
+  const chkTodos = document.getElementById('casc-chk-todos');
+  if(chkTodos){
+    const selCount = filtered.filter(c => S.lotes.includes(parseInt(c.lote))).length;
+    chkTodos.checked = selCount === filtered.length && filtered.length > 0;
+    chkTodos.indeterminate = selCount > 0 && selCount < filtered.length;
+  }
+}
+
+function toggleLoteDropdown(){
+  const dd = document.getElementById('casc-lote-dropdown');
+  const chev = document.getElementById('casc-lote-chevron');
+  const open = dd.style.display === 'none';
+  dd.style.display = open ? '' : 'none';
+  if(chev) chev.style.transform = open ? 'rotate(180deg)' : '';
+  if(open){ document.getElementById('casc-lote-search').value = ''; renderLotesDropdown(); document.getElementById('casc-lote-search').focus(); }
+}
+
+function cerrarLoteDropdown(){
+  const dd = document.getElementById('casc-lote-dropdown');
+  const chev = document.getElementById('casc-lote-chevron');
+  if(dd) dd.style.display = 'none';
+  if(chev) chev.style.transform = '';
+}
+
+function filtrarLotesDropdown(){ renderLotesDropdown(); }
+
+function toggleLote(loteNum){
+  const i = S.lotes.indexOf(loteNum);
+  if(i >= 0) S.lotes.splice(i, 1); else S.lotes.push(loteNum);
+  S.lotes.sort((a,b) => a - b);
+  renderLotesDropdown();
+  actualizarTagsLotes();
+}
+
+function toggleTodosLotes(){
+  const lotes = getLotesFiltrados(cascada.etapa, cascada.cultivo, cascada.modulo);
+  const q = (document.getElementById('casc-lote-search')?.value || '').toLowerCase();
+  const filtered = q ? lotes.filter(c => String(c.lote||'').toLowerCase().includes(q)) : lotes;
+  const nums = filtered.map(c => parseInt(c.lote));
+  const todosSeleccionados = nums.every(n => S.lotes.includes(n));
+  if(todosSeleccionados){ S.lotes = S.lotes.filter(n => !nums.includes(n)); }
+  else { nums.forEach(n => { if(!S.lotes.includes(n)) S.lotes.push(n); }); S.lotes.sort((a,b)=>a-b); }
+  renderLotesDropdown();
+  actualizarTagsLotes();
+}
+
+function actualizarTagsLotes(){
+  // Actualizar el label del botón
+  const btn = document.getElementById('casc-lote-label');
+  if(btn) btn.textContent = S.lotes.length ? S.lotes.length + ' lote' + (S.lotes.length>1?'s':'') + ' seleccionado' + (S.lotes.length>1?'s':'') : 'Seleccionar lotes…';
+  // Renderizar tags debajo del dropdown
+  const tags = document.getElementById('casc-lote-tags');
+  if(!tags) return;
+  if(!S.lotes.length){ tags.innerHTML = ''; return; }
+  tags.innerHTML = S.lotes.map(n =>
+    `<span style="display:inline-flex;align-items:center;gap:5px;background:var(--primary-bg);border:1px solid var(--primary-b);color:var(--text-accent);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:500">
+      Lote ${n}
+      <button type="button" onclick="toggleLote(${n})" style="background:none;border:none;cursor:pointer;color:var(--text-accent);padding:0;line-height:1;font-size:14px;display:flex">×</button>
+    </span>`
   ).join('');
 }
 
-function toggleChip(l){const i=S.lotes.indexOf(l);if(i>=0)S.lotes.splice(i,1);else S.lotes.push(l);renderChips();}
+// Cerrar dropdown al click fuera
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('casc-lote-wrap');
+  if(wrap && !wrap.contains(e.target)) cerrarLoteDropdown();
+});
+
+// Mantener compatibilidad con el guardado (S.lotes ahora son ints, necesitamos strings para guardar)
+function getLotesStringParaGuardar(){
+  if(!S.lotes.length) return '';
+  return S.lotes.map(n => {
+    const c = getCultivos().find(x => parseInt(x.lote) === n && x.etapa === cascada.etapa && x.cultivo === cascada.cultivo && x.modulo === cascada.modulo);
+    return c ? `${c.etapa} — ${c.modulo} — Lote ${n} (${c.cultivo})` : `Lote ${n}`;
+  }).join(', ');
+}
+
+// Deprecar funciones antiguas de chips
+function renderChips(){ initCascada(); }
+function toggleChip(l){ /* no-op */ }
+function getLotesParaChips(){ return []; }
 
 async function guardarRegistro(){
   const fecha=document.getElementById('f-fecha').value;
@@ -824,7 +1059,7 @@ async function guardarRegistro(){
     document.getElementById('reg-err-t').textContent='Completa todos los campos y selecciona al menos un lote.';
     errEl.classList.add('show');return;
   }
-  const reg={fecha,hora,area,responsable:resp,lotes:S.lotes.join(', '),tipo,actividad:act,nPersonas:np,obs,registradoPor:S.usuario?.nombre||'',timestamp:new Date().toISOString()};
+  const reg={fecha,hora,area,responsable:resp,lotes:getLotesStringParaGuardar(),tipo,actividad:act,nPersonas:np,obs,registradoPor:S.usuario?.nombre||'',timestamp:new Date().toISOString()};
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;document.getElementById('reg-sav').style.display='flex';
   try{
@@ -836,7 +1071,7 @@ async function guardarRegistro(){
     document.getElementById('f-np').value='';
     document.getElementById('f-obs').value='';
     document.getElementById('f-hora').value=horaAhora();
-    S.lotes=[];renderChips();
+    S.lotes=[];initCascada();
     setTimeout(()=>okEl.classList.remove('show'),4000);
   }catch(e){
     document.getElementById('reg-sav').style.display='none';
