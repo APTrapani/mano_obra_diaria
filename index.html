@@ -136,7 +136,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 .ss-empty{padding:10px 12px;font-size:12px;color:var(--text-label);text-align:center}
 
 /* KPIs DASHBOARD */
-.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-bottom:1rem}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin-bottom:1rem}
 .kpi{background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);padding:.6rem 1rem;position:relative;overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .2s}
 .kpi:hover{box-shadow:var(--shadow-md)}
 .kpi-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.4rem;font-size:15px}
@@ -214,12 +214,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 .fdate::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(1) hue-rotate(100deg) saturate(2);cursor:pointer;opacity:.5}
 
 /* ── SEGMENTADOR DE FECHA (DASHBOARD) ── */
-.dash-seg{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);padding:1rem 1.25rem;margin-bottom:1.75rem}
 .seg-label{font-size:11px;font-weight:600;color:var(--text-label);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
-.seg-tabs{display:flex;gap:4px}
-.seg-tab{padding:5px 12px;font-size:12px;font-weight:500;font-family:var(--font);background:transparent;border:1px solid var(--border-hover);border-radius:6px;color:var(--text-sec);cursor:pointer;transition:all .2s}
-.seg-tab:hover{background:var(--bg-input);color:var(--text-main)}
-.seg-tab.active{background:var(--primary-bg);border-color:var(--primary-b);color:var(--text-accent)}
 .seg-sep{width:1px;height:24px;background:var(--border-base)}
 .seg-dates{display:flex;align-items:center;gap:6px}
 .seg-dates span{font-size:11px;color:var(--text-muted)}
@@ -307,6 +302,113 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 /* Config welcome cards hover */
 /* RESPONSIVE */
 @media(max-width:700px){.sidebar{display:none}.main{padding:1rem}.row2,.row3,.two-col{grid-template-columns:1fr}.topbar-date{display:none}.kpi-grid{grid-template-columns:1fr 1fr}}
+
+/* ══════════════════════════════════════════
+   MOBILE LAYOUT (≤768px)
+══════════════════════════════════════════ */
+@media(max-width:768px){
+  /* Ocultar elementos desktop */
+  .topbar{display:none}
+  .sidebar{display:none}
+  .app-body{flex-direction:column;height:100dvh;overflow:hidden}
+  .main{padding:0;height:calc(100dvh - 56px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+  /* Ocultar páginas desktop en móvil (excepto las móviles) */
+  #page-inicio,#page-nuevo,#page-reportes,#page-config{display:none!important}
+  #page-inicio.active,#page-nuevo.active,#page-reportes.active{display:none!important}
+
+  /* Páginas móviles */
+  .mob-page{display:none;flex-direction:column;height:100%;animation:fadeIn .2s ease}
+  .mob-page.active{display:flex}
+
+  /* Bottom nav */
+  .mob-nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:var(--green-dark);display:flex;z-index:500;border-top:1px solid rgba(255,255,255,.1)}
+  .mob-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:transparent;border:none;cursor:pointer;color:rgba(200,235,213,.6);font-family:var(--font);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;transition:color .2s;-webkit-tap-highlight-color:transparent}
+  .mob-nav-btn svg{width:20px;height:20px;flex-shrink:0}
+  .mob-nav-btn.active{color:#fff}
+  .mob-nav-btn.active svg{filter:drop-shadow(0 0 4px rgba(74,153,96,.8))}
+
+  /* Header móvil */
+  .mob-header{background:var(--green-dark);padding:.85rem 1rem .7rem;flex-shrink:0}
+  .mob-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem}
+  .mob-header-title{font-size:15px;font-weight:700;color:#fff;letter-spacing:.01em}
+  .mob-header-sub{font-size:11px;color:var(--green-pale);font-weight:500}
+  .mob-header-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:#fff}
+
+  /* Scroll body */
+  .mob-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.85rem 1rem 1rem}
+
+  /* KPI grid móvil */
+  .mob-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.85rem}
+  .mob-kpi{background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);padding:.7rem .85rem;position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .mob-kpi-n{font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--green-dark);line-height:1;font-family:var(--mono)}
+  .mob-kpi-n-txt{font-size:14px;font-weight:700;line-height:1.2;color:var(--green-dark);word-break:break-word;min-height:28px;display:flex;align-items:center}
+  .mob-kpi-l{font-size:9px;color:var(--text-label);margin-top:.2rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+  .mob-kpi-sub{font-size:10px;color:var(--text-sec);margin-top:.15rem;font-weight:500}
+  .mob-kpi-deco{position:absolute;right:-10px;bottom:-10px;width:52px;height:52px;border-radius:50%;opacity:.07}
+  .mob-kpi-prog{height:3px;background:var(--border-base);border-radius:2px;margin-top:.4rem;overflow:hidden}
+  .mob-kpi-prog-fill{height:100%;border-radius:2px;transition:width .6s ease-out}
+
+  /* Fecha filter móvil */
+  .mob-date-bar{display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem;background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);padding:.6rem .85rem}
+  .mob-date-bar label{font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;flex-shrink:0}
+  .mob-date-bar input{flex:1;border:none;background:transparent;font-size:13px;font-family:var(--font);color:var(--text-main);outline:none}
+
+  /* Sección título */
+  .mob-sec-title{font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;padding-left:.1rem;display:flex;align-items:center;gap:6px}
+
+  /* Lista actividades móvil */
+  .mob-act-list{background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);overflow:hidden;margin-bottom:.85rem;box-shadow:var(--shadow-sm)}
+  .mob-act-item{display:flex;align-items:center;gap:.7rem;padding:.6rem .85rem;border-bottom:.5px solid var(--border-base)}
+  .mob-act-item:last-child{border-bottom:none}
+  .mob-act-name{font-size:12px;font-weight:600;color:var(--text-main);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mob-act-bar-wrap{width:80px;flex-shrink:0}
+  .mob-act-bar-track{height:6px;background:var(--border-base);border-radius:3px;overflow:hidden}
+  .mob-act-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#4a9960,#1a3320)}
+  .mob-act-count{font-size:12px;font-weight:700;color:var(--green-dark);font-family:var(--mono);width:28px;text-align:right;flex-shrink:0}
+
+  /* Lista responsables móvil */
+  .mob-resp-list{background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);overflow:hidden;margin-bottom:1rem;box-shadow:var(--shadow-sm)}
+  .mob-resp-item{display:flex;align-items:center;gap:.7rem;padding:.6rem .85rem;border-bottom:.5px solid var(--border-base)}
+  .mob-resp-item:last-child{border-bottom:none}
+  .mob-resp-av{width:28px;height:28px;border-radius:8px;background:var(--primary-bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--green-dark);flex-shrink:0}
+  .mob-resp-name{font-size:12px;font-weight:600;color:var(--text-main);flex:1}
+  .mob-resp-count{font-size:12px;font-weight:700;color:var(--green-dark);font-family:var(--mono)}
+
+  /* Formulario móvil */
+  .mob-form-header{background:var(--green-dark);padding:.85rem 1rem;flex-shrink:0;display:flex;align-items:center;gap:.75rem}
+  .mob-form-title{font-size:15px;font-weight:700;color:#fff}
+  .mob-form-sub{font-size:11px;color:var(--green-pale)}
+  .mob-form-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem}
+  .mob-form-body .field{margin-bottom:1rem}
+  .mob-form-body .field label{font-size:11px}
+  .mob-form-body .field input,
+  .mob-form-body .field select,
+  .mob-form-body .field textarea{font-size:16px!important;padding:10px 12px}/* 16px evita zoom en iOS */
+  .mob-form-footer{padding:.75rem 1rem;background:var(--bg-panel);border-top:1px solid var(--border-base);flex-shrink:0}
+  .mob-btn-guardar{width:100%;padding:14px;font-size:15px;font-weight:700;background:var(--green-dark);color:#fff;border:none;border-radius:var(--r2);cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;transition:background .2s;letter-spacing:.02em}
+  .mob-btn-guardar:active{background:var(--green-mid)}
+  .mob-btn-guardar:disabled{opacity:.5}
+
+  /* Estado vacío */
+  .mob-empty{text-align:center;padding:2.5rem 1rem;color:var(--text-muted);font-size:13px}
+  .mob-empty svg{width:36px;height:36px;margin-bottom:.5rem;opacity:.4}
+}
+
+/* ══════════════════════════════════════════
+   REPORTES — Edición y selección múltiple
+══════════════════════════════════════════ */
+.rep-actions-bar{display:flex;align-items:center;gap:8px;margin-bottom:.75rem;min-height:32px}
+.rep-sel-count{font-size:12px;font-weight:600;color:var(--text-sec);margin-right:auto}
+.btn-edit-reg{background:transparent;border:none;cursor:pointer;color:var(--text-label);padding:4px;border-radius:4px;display:inline-flex;align-items:center;transition:color .15s,background .15s}
+.btn-edit-reg:hover{color:var(--blue);background:var(--blue-bg)}
+.btn-edit-reg svg{width:13px;height:13px}
+.reg-chk{accent-color:var(--green-dark);cursor:pointer;width:13px;height:13px}
+tr.reg-selected td{background:rgba(74,153,96,.06)!important}
+
+/* Modal edición registro */
+#modal-edit-reg .field{margin-bottom:.85rem}
+
 </style>
 </head>
 <body>
@@ -438,23 +540,36 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
           </button>
         </div>
 
-        <!-- SEGMENTADOR -->
-        <div class="dash-seg">
-          <span class="seg-label">Período</span>
-          <div class="seg-tabs">
-            <button class="seg-tab active" data-seg="hoy" onclick="setSeg(this)">Hoy</button>
-            <button class="seg-tab" data-seg="ayer" onclick="setSeg(this)">Ayer</button>
-            <button class="seg-tab" data-seg="semana" onclick="setSeg(this)">Semana</button>
-            <button class="seg-tab" data-seg="mes" onclick="setSeg(this)">Mes</button>
-            <button class="seg-tab" data-seg="rango" onclick="setSeg(this)">Rango</button>
+        <!-- FILTROS PERSONALIZADOS -->
+        <div style="background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);margin-bottom:1.75rem;overflow:visible">
+          <button onclick="toggleFiltros()" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;background:transparent;border:none;cursor:pointer;font-family:var(--font)">
+            <span style="font-size:12px;font-weight:600;color:var(--text-sec)">Filtros Personalizados</span>
+            <svg id="filtros-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:var(--text-label);transition:transform .2s"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="filtros-body" style="display:none;padding:.75rem 1.25rem 1rem;border-top:1px solid var(--border-base)">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;align-items:end">
+              <div class="field" style="margin-bottom:0">
+                <label>Fecha desde</label>
+                <input type="date" id="fil-dash-desde" onchange="renderInicio()" style="width:100%;padding:8px 10px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:12px;font-family:var(--font);color:var(--text-main);outline:none">
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label>Fecha hasta</label>
+                <input type="date" id="fil-dash-hasta" onchange="renderInicio()" style="width:100%;padding:8px 10px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:12px;font-family:var(--font);color:var(--text-main);outline:none">
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label>Actividad</label>
+                <div class="ss-wrap" id="ss-wrap-fil-dash-act">
+                  <input class="ss-input" id="ss-fil-dash-act" placeholder="Todas las actividades…" readonly onclick="ssToggle('fil-dash-act')" autocomplete="off">
+                  <svg class="ss-arrow" id="ss-arr-fil-dash-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg>
+                  <div class="ss-drop" id="ss-drop-fil-dash-act">
+                    <input class="ss-search" placeholder="Buscar actividad…" oninput="ssFilter('fil-dash-act',this.value)" id="ss-search-fil-dash-act">
+                    <div class="ss-list" id="ss-list-fil-dash-act"></div>
+                  </div>
+                </div>
+                <input type="hidden" id="fil-dash-act">
+              </div>
+            </div>
           </div>
-          <div class="seg-sep"></div>
-          <div class="seg-dates" id="seg-dates-wrap" style="display:none">
-            <input type="date" class="fdate" id="seg-desde" onchange="renderInicio()">
-            <span>—</span>
-            <input type="date" class="fdate" id="seg-hasta" onchange="renderInicio()">
-          </div>
-          <div class="seg-total" id="seg-total">0 personas</div>
         </div>
 
         <!-- KPIs -->
@@ -489,19 +604,31 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
             <div class="kpi-h" id="k-cp">—</div>
             <div class="kpi-prog-track"><div class="kpi-prog-fill" id="k-contrata-prog" style="width:0%;background:linear-gradient(90deg,#fcd34d,#b45309)"></div></div>
           </div>
+          <div class="kpi">
+            <div class="kpi-deco" style="background:var(--blue)"></div>
+            <div class="kpi-icon" style="background:var(--blue-bg)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="kpi-n" id="k-foco" style="font-size:15px;line-height:1.25;word-break:break-word;margin-top:4px;min-height:34px;display:flex;align-items:center">—</div>
+            <div class="kpi-l">Foco operativo</div>
+            <div class="kpi-h" id="k-foco-h"><span style="color:var(--text-muted)">Sin actividad</span></div>
+            <div class="kpi-prog-track"><div class="kpi-prog-fill" id="k-foco-prog" style="width:0%;background:linear-gradient(90deg,#60a5fa,#1d4ed8)"></div></div>
+          </div>
         </div>
 
         <!-- FILA 1: Área + Actividades + Responsables (3 columnas) -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.85rem;margin-bottom:.85rem">
-          <div class="dash-card">
+        <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:.85rem;margin-bottom:.85rem">
+          <div class="dash-card" style="display:flex;flex-direction:column">
             <div class="dc-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               Personal por área
             </div>
-            <div style="font-size:11px;color:var(--text-label);text-align:center;margin-bottom:.5rem" id="area-pie-total"></div>
-            <div id="area-pie-wrap" style="display:flex;align-items:flex-start;gap:1rem">
-              <svg id="area-pie-svg" viewBox="-1 -1 202 202" style="width:130px;height:130px;flex-shrink:0"></svg>
-              <div id="area-pie-legend" style="flex:1;display:flex;flex-direction:column;gap:.3rem;overflow-y:auto;max-height:130px"></div>
+            <div id="area-pie-total" style="display:none"></div>
+            <div id="area-pie-wrap" style="display:flex;align-items:center;gap:.75rem;flex:1;min-height:0">
+              <div id="area-pie-container" style="flex:0 0 auto;align-self:stretch;display:flex;align-items:center">
+                <svg id="area-pie-svg" viewBox="-1 -1 202 202" style="display:block"></svg>
+              </div>
+              <div id="area-pie-legend" style="flex:1;display:flex;flex-direction:column;gap:.4rem;min-width:0;justify-content:center"></div>
             </div>
           </div>
           <div class="dash-card">
@@ -569,10 +696,10 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
             </div>
             <div class="field" id="field-contratista" style="display:none"><label>Contratista</label><div class="ss-wrap" id="ss-wrap-f-contratista"><input class="ss-input" id="ss-f-contratista" placeholder="Seleccionar contratista…" readonly onclick="ssToggle('f-contratista')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-contratista',this.value)" id="ss-search-f-contratista"><div class="ss-list" id="ss-list-f-contratista"></div></div></div><input type="hidden" id="f-contratista"></div>
             <div class="field"><label>Actividad</label><div class="ss-wrap" id="ss-wrap-f-act"><input class="ss-input" id="ss-f-act" placeholder="Seleccionar actividad…" readonly onclick="ssToggle('f-act')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-act',this.value)" id="ss-search-f-act"><div class="ss-list" id="ss-list-f-act"></div></div></div><input type="hidden" id="f-act"></div>
+            <div class="field"><label>Tarea / Meta</label><input type="number" id="f-tarea" min="0" step="any" placeholder="0"></div>
             <div class="field"><label>N° personas</label><input type="number" id="f-np" min="1" max="999" placeholder="0"></div>
           </div>
           <div class="row3">
-            <div class="field"><label>Tarea / Meta</label><input type="text" id="f-tarea" placeholder="Ej. 2 ha, 500 plantas…"></div>
             <div class="field"><label>Hora de inicio</label><input type="time" id="f-hora"></div>
             <div class="field"><label>Hora de término</label><input type="time" id="f-hora-fin"></div>
           </div>
@@ -633,9 +760,16 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
           <select class="fsel" id="fil-tipo"  onchange="renderReportes()"><option value="">Todos los tipos</option><option value="Propio">Propio</option><option value="Contrata">Contrata</option></select>
           <select class="fsel" id="fil-act"   onchange="renderReportes()"><option value="">Todas las actividades</option></select>
         </div>
+        <div class="rep-actions-bar" id="rep-actions-bar" style="display:none">
+          <span class="rep-sel-count" id="rep-sel-count">0 seleccionados</span>
+          <button class="btn btn-danger btn-sm" onclick="eliminarRegistrosSeleccionados()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Eliminar seleccionados
+          </button>
+        </div>
         <div class="tw">
           <table class="tbl">
-            <thead><tr><th>Fecha</th><th>Inicio</th><th>Término</th><th>Área</th><th>Responsable</th><th>Lotes</th><th>Tipo</th><th>Contratista</th><th>Actividad</th><th>Tarea</th><th style="text-align:center">N°</th><th>Observaciones</th></tr></thead>
+            <thead><tr><th style="width:32px"><input type="checkbox" class="reg-chk" id="chk-all-reg" onclick="toggleAllRegs(this)" title="Seleccionar todos"></th><th>Fecha</th><th>Inicio</th><th>Término</th><th>Área</th><th>Responsable</th><th>Lotes</th><th>Tipo</th><th>Contratista</th><th>Actividad</th><th>Tarea</th><th style="text-align:center">N°</th><th>Observaciones</th><th style="width:36px"></th></tr></thead>
             <tbody id="tbody-rep"></tbody>
           </table>
         </div>
@@ -663,6 +797,60 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
         </div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ MODAL EDITAR REGISTRO ═══ -->
+<div class="mbg" id="modal-edit-reg">
+  <div class="modal" id="modal-edit-reg-inner" style="max-width:640px;max-height:90vh;overflow-y:auto">
+    <div class="modal-t">Editar Registro</div>
+    <div id="modal-edit-reg-body">
+      <div class="row3">
+        <div class="field"><label>Fecha</label><input type="date" id="er-fecha"></div>
+        <div class="field"><label>Hora inicio</label><input type="time" id="er-hora"></div>
+        <div class="field"><label>Hora término</label><input type="time" id="er-hora-fin"></div>
+      </div>
+      <div class="row3">
+        <div class="field"><label>Área</label>
+          <div class="ss-wrap" id="ss-wrap-er-area"><input class="ss-input" id="ss-er-area" placeholder="Área…" readonly onclick="ssToggle('er-area')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-area',this.value)" id="ss-search-er-area"><div class="ss-list" id="ss-list-er-area"></div></div></div>
+          <input type="hidden" id="er-area">
+        </div>
+        <div class="field"><label>Responsable</label>
+          <div class="ss-wrap" id="ss-wrap-er-resp"><input class="ss-input" id="ss-er-resp" placeholder="Responsable…" readonly onclick="ssToggle('er-resp')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-resp',this.value)" id="ss-search-er-resp"><div class="ss-list" id="ss-list-er-resp"></div></div></div>
+          <input type="hidden" id="er-resp">
+        </div>
+        <div class="field"><label>Tipo</label>
+          <select id="er-tipo" onchange="toggleEditContratista()" style="width:100%;padding:8px 10px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:12px;font-family:var(--font);color:var(--text-main);outline:none;appearance:none;-webkit-appearance:none">
+            <option value="Propio">Propio</option><option value="Contrata">Contrata</option>
+          </select>
+        </div>
+      </div>
+      <div class="row3">
+        <div class="field"><label>Actividad</label>
+          <div class="ss-wrap" id="ss-wrap-er-act"><input class="ss-input" id="ss-er-act" placeholder="Actividad…" readonly onclick="ssToggle('er-act')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-act',this.value)" id="ss-search-er-act"><div class="ss-list" id="ss-list-er-act"></div></div></div>
+          <input type="hidden" id="er-act">
+        </div>
+        <div class="field" id="er-field-contratista" style="display:none"><label>Contratista</label>
+          <div class="ss-wrap" id="ss-wrap-er-contratista"><input class="ss-input" id="ss-er-contratista" placeholder="Contratista…" readonly onclick="ssToggle('er-contratista')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-contratista',this.value)" id="ss-search-er-contratista"><div class="ss-list" id="ss-list-er-contratista"></div></div></div>
+          <input type="hidden" id="er-contratista">
+        </div>
+        <div class="field"><label>N° personas</label><input type="number" id="er-np" min="1" max="999" placeholder="0"></div>
+      </div>
+      <div class="row3">
+        <div class="field"><label>Tarea / Meta</label><input type="number" id="er-tarea" min="0" step="any" placeholder="0"></div>
+        <div class="field"><label>Lotes</label><input type="text" id="er-lotes" placeholder="7, 8, 10…"></div>
+        <div class="field"></div>
+      </div>
+      <div class="field"><label>Observaciones</label><textarea id="er-obs" style="min-height:70px"></textarea></div>
+    </div>
+    <div class="modal-f">
+      <button class="btn btn-ghost" onclick="cerrarEditReg()">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarEditReg()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar cambios
+      </button>
     </div>
   </div>
 </div>
@@ -1030,47 +1218,44 @@ function goPage(id,btn){
 
 
 /* ═══════════ SEGMENTADOR ═══════════ */
-function setSeg(btn){
-  document.querySelectorAll('.seg-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  S.seg=btn.dataset.seg;
-  const rango=S.seg==='rango';
-  document.getElementById('seg-dates-wrap').style.display=rango?'flex':'none';
-  if(!rango)renderInicio();
+function toggleFiltros(){
+  const body=document.getElementById('filtros-body');
+  const chev=document.getElementById('filtros-chevron');
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  chev.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+}
+
+function initFiltrosDash(){
+  // Fechas: hoy por defecto en ambos campos
+  const fd=document.getElementById('fil-dash-desde');
+  const fh=document.getElementById('fil-dash-hasta');
+  const hoy=isoHoy();
+  if(fd&&!fd.value) fd.value=hoy;
+  if(fh&&!fh.value) fh.value=hoy;
+  // Actividad: poblar ss solo si aún no tiene datos
+  if(!(SS_DATA['fil-dash-act']?.length)){
+    const acts=(DB.maestros.actividades||[]).map(a=>typeof a==='string'?a:(a.actividad||'')).filter(Boolean);
+    ssLoad('fil-dash-act', acts);
+  }
 }
 
 function getSegFiltro(){
   const hoy=isoHoy();
-  if(S.seg==='hoy')return r=>r.fecha===hoy;
-  if(S.seg==='ayer'){
-    const ay=new Date();ay.setDate(ay.getDate()-1);
-    const ayISO=ay.toISOString().split('T')[0];
-    return r=>r.fecha===ayISO;
-  }
-  if(S.seg==='semana'){
-    const d=new Date();
-    const lun=new Date(d.setDate(d.getDate()-d.getDay()+1));
-    const lunISO=lun.toISOString().split('T')[0];
-    return r=>r.fecha>=lunISO&&r.fecha<=hoy;
-  }
-  if(S.seg==='mes'){
-    const m=hoy.slice(0,7);
-    return r=>r.fecha.startsWith(m);
-  }
-  if(S.seg==='rango'){
-    const desde=document.getElementById('seg-desde').value;
-    const hasta=document.getElementById('seg-hasta').value;
-    if(!desde&&!hasta)return r=>r.fecha===hoy;
-    if(desde&&!hasta)return r=>r.fecha>=desde;
-    if(!desde&&hasta)return r=>r.fecha<=hasta;
-    return r=>r.fecha>=desde&&r.fecha<=hasta;
-  }
-  return r=>r.fecha===hoy;
+  const desde=(document.getElementById('fil-dash-desde')?.value)||hoy;
+  const hasta=(document.getElementById('fil-dash-hasta')?.value)||hoy;
+  const act=(document.getElementById('fil-dash-act')?.value)||'';
+  return r=>{
+    if(r.fecha<desde||r.fecha>hasta) return false;
+    if(act && r.actividad!==act) return false;
+    return true;
+  };
 }
 
 /* ═══════════ INICIO / DASHBOARD ═══════════ */
 function renderInicio(){
   document.getElementById('inicio-fecha').textContent=fechaLarga();
+  initFiltrosDash();
   const filtro=getSegFiltro();
   const regs=S.registros.filter(filtro);
   const total=regs.reduce((s,r)=>s+(parseInt(r.nPersonas)||0),0);
@@ -1083,7 +1268,7 @@ function renderInicio(){
   animCount('k-total', total);
   animCount('k-propio', propio);
   animCount('k-contrata', contrata);
-  document.getElementById('seg-total').textContent=total+' persona'+(total!==1?'s':'');
+
   document.getElementById('k-total-h').innerHTML=total
     ? `<span class="kpi-badge neutral">${regs.length} registros</span>`
     : '<span style="color:var(--text-muted)">Sin actividad</span>';
@@ -1107,8 +1292,37 @@ function renderInicio(){
   regs.forEach(r=>{
     if(r.actividad)byA[r.actividad]=(byA[r.actividad]||0)+(parseInt(r.nPersonas)||0);
     if(r.area)byArea[r.area]=(byArea[r.area]||0)+(parseInt(r.nPersonas)||0);
-    if(r.responsable)byResp[r.responsable]=(byResp[r.responsable]||0)+(parseInt(r.nPersonas)||0);
+    if(r.responsable){
+      const np=parseInt(r.nPersonas)||0;
+      if(!byResp[r.responsable]) byResp[r.responsable]={propio:0,contrata:0,contratas:{},total:0};
+      byResp[r.responsable].total+=np;
+      if(r.tipo==='Propio') byResp[r.responsable].propio+=np;
+      else if(r.tipo==='Contrata'){
+        byResp[r.responsable].contrata+=np;
+        const c=r.contratista||'Sin contratista';
+        byResp[r.responsable].contratas[c]=(byResp[r.responsable].contratas[c]||0)+np;
+      }
+    }
   });
+
+  // ── KPI Foco operativo ──
+  {
+    const focoEl=document.getElementById('k-foco');
+    const focoH=document.getElementById('k-foco-h');
+    const focoProg=document.getElementById('k-foco-prog');
+    const actEntries=Object.entries(byA);
+    if(actEntries.length&&total){
+      const [focoAct,focoCnt]=actEntries.reduce((a,b)=>b[1]>a[1]?b:a);
+      const focoPct=Math.round(focoCnt/total*100);
+      focoEl.textContent=focoAct;
+      focoH.innerHTML=`<span class="kpi-badge" style="background:var(--blue-bg);color:var(--blue)">Concentra el ${focoPct}% del personal</span>`;
+      setTimeout(()=>{focoProg.style.width=focoPct+'%';},100);
+    }else{
+      focoEl.textContent='—';
+      focoH.innerHTML='<span style="color:var(--text-muted)">Sin actividad</span>';
+      focoProg.style.width='0%';
+    }
+  }
 
   // Gradientes para barras
   const GRAD_ACT=[
@@ -1147,7 +1361,7 @@ function renderInicio(){
 
   renderStackedAct(byADesglose);
   renderAreaPie(byArea);
-  renderBars('bars-resp', byResp, GRAD_RESP, 8);
+  renderBarsResp(byResp);
   renderEvolucion();
   renderResumen(regs);
   renderDonut(propio, contrata, total);
@@ -1369,10 +1583,10 @@ function renderLotesDD(){
   list.innerHTML = filtered.map(l => {
     const sel = isLoteSel(l.n);
     return `<div data-sel="${sel?'1':'0'}" onclick="toggleLoteDD(${l.n},'${l.modulo.replace(/'/g,"\\'")}','${l.etapa.replace(/'/g,"\\'")}',event)"
-      style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;border-bottom:0.5px solid var(--border-base);background:${sel?'var(--primary-bg)':'transparent'};border-left:${sel?'3px solid var(--green-bright)':'3px solid transparent'};transition:background .12s"
+      style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;border-bottom:0.5px solid var(--border-base);background:${sel?'var(--primary-bg)':'transparent'};transition:background .12s"
       onmouseover="this.style.background=this.dataset.sel==='1'?'var(--primary-bg)':'var(--bg-base)'"
       onmouseout="this.style.background=this.dataset.sel==='1'?'var(--primary-bg)':'transparent'">
-      <input type="checkbox" ${sel?'checked':''} onclick="event.stopPropagation();toggleLoteDD(${l.n},'${l.modulo.replace(/'/g,"\\'")}','${l.etapa.replace(/'/g,"\\'")}',event)" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;flex-shrink:0">
+      <span style="width:16px;height:16px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:2px solid ${sel?'var(--green-bright)':'var(--border-hover)'};background:${sel?'var(--green-bright)':'transparent'};transition:all .15s">${sel?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</span>
       <span style="font-size:13px;font-weight:700;color:var(--text-main);width:34px;flex-shrink:0">${l.n}</span>
       <div style="flex:1;min-width:0">
         <div style="font-size:12px;color:var(--text-sec)">${l.cult||'—'}</div>
@@ -1846,8 +2060,11 @@ function renderReportes(){
     tbody.innerHTML='<tr><td colspan="9"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>No se encontraron registros.</div></td></tr>';
     return;
   }
-  tbody.innerHTML=regs.map(r=>`
-    <tr>
+  const isAdmin = S.usuario?.rol==='admin';
+  tbody.innerHTML=regs.map(r=>{
+    const sel = regSeleccionados.has(r.timestamp);
+    return `<tr class="${sel?'reg-selected':''}">
+      <td style="text-align:center">${isAdmin?`<input type="checkbox" class="reg-chk" ${sel?'checked':''} onclick="toggleRegSel('${r.timestamp}');renderReportes()">`:''}</td>
       <td class="mc" style="white-space:nowrap">${fechaCorta(r.fecha)}</td>
       <td class="mc">${r.hora||'—'}</td>
       <td class="mc">${r.horaFin||'—'}</td>
@@ -1860,7 +2077,10 @@ function renderReportes(){
       <td style="font-size:11px;color:var(--text-sec)">${r.tarea||'—'}</td>
       <td style="font-weight:700;text-align:center;font-family:var(--mono);color:var(--green-dark)">${r.nPersonas}</td>
       <td style="font-size:11px;color:var(--text-sec);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${r.obs||''}">${r.obs||'—'}</td>
-    </tr>`).join('');
+      <td>${isAdmin?`<button class="btn-edit-reg" onclick="abrirEditReg('${r.timestamp}')" title="Editar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>`:''}</td>
+    </tr>`;
+  }).join('');
+  actualizarBarraAcciones();
 }
 
 function filtrar(){
@@ -2488,6 +2708,107 @@ function importarCultivos(input){
 
 
 
+/* ── BARRAS RESPONSABLES ── */
+function renderBarsResp(byResp){
+  const el = document.getElementById('bars-resp');
+  if(!el) return;
+
+  const entries = Object.entries(byResp)
+    .map(([k,d])=>({
+      nombre: k,
+      propio: d.propio||0,
+      contratas: d.contratas||{},
+      total: d.total||0
+    }))
+    .filter(e=>e.total>0)
+    .sort((a,b)=>b.total-a.total)
+    .slice(0,10);
+
+  if(!entries.length){
+    el.innerHTML='<div style="font-size:12px;color:var(--text-muted);padding:.5rem 0">Sin datos para el período.</div>';
+    return;
+  }
+
+  const allContratas = [...new Set(entries.flatMap(e=>Object.keys(e.contratas)))];
+  const maxVal = Math.max(...entries.map(e=>e.total), 1);
+
+  // labelW dinámico según nombre más largo (~6.5px/char a font 10), mín 120, máx 220
+  const maxNomLen = Math.max(...entries.map(e=>e.nombre.length));
+  const labelW = Math.min(220, Math.max(120, Math.ceil(maxNomLen * 6.5)));
+  const trackW=180, numW=36, padL=4, padT=4, padR=4;
+  const barH=24, gap=11;
+  const W = padL + labelW + trackW + numW + padR;
+  const svgH = padT*2 + entries.length*(barH+gap) - gap;
+
+  // Propio: verde, contratistas: colores contrastados
+  const CONTRATA_COLORS = [
+    ['#f59e0b','#78350f'],
+    ['#ef4444','#7f1d1d'],
+    ['#8b5cf6','#3b0764'],
+    ['#06b6d4','#164e63'],
+    ['#f97316','#7c2d12'],
+    ['#ec4899','#500724'],
+  ];
+
+  const defs = '';
+
+  // Leyenda
+  const legendItems = [
+    `<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#4a9960;border-radius:2px;display:inline-block"></span>Propio</span>`,
+    ...allContratas.map((c,i)=>{
+      const [a]=CONTRATA_COLORS[i%CONTRATA_COLORS.length];
+      return `<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:${a};border-radius:2px;display:inline-block"></span>${c}</span>`;
+    })
+  ];
+  const legend = `<div style="display:flex;flex-wrap:wrap;gap:.4rem .85rem;margin-bottom:.5rem;font-size:10px;font-weight:600;color:var(--text-label)">${legendItems.join('')}</div>`;
+
+  let rows = '';
+  entries.forEach((e,i)=>{
+    const y = padT + i*(barH+gap);
+    const xTrack = padL + labelW;
+    const truncNom = e.nombre;
+
+    rows += `<text x="${padL+labelW-6}" y="${y+barH/2+1}" text-anchor="end" dominant-baseline="middle"
+      font-size="11" font-weight="600" fill="var(--text-main)" font-family="var(--font)">${truncNom}</text>`;
+    rows += `<rect x="${xTrack}" y="${y}" width="${trackW}" height="${barH}" rx="4" fill="var(--border-base)" opacity=".35"/>`;
+
+    let curX = xTrack;
+
+    // Propio
+    if(e.propio>0){
+      const wP = (e.propio/maxVal)*trackW;
+      const contKeys = Object.keys(e.contratas);
+      const rx = contKeys.length>0 ? '4 0 0 4' : '4';
+      rows += `<rect x="${curX.toFixed(1)}" y="${y}" width="${wP.toFixed(1)}" height="${barH}" rx="${rx}" fill="#4a9960"/>`;
+      if(wP>24) rows += `<text x="${(curX+wP/2).toFixed(1)}" y="${y+barH/2+1}" text-anchor="middle" dominant-baseline="middle"
+        font-size="10" font-weight="700" fill="#fff" font-family="var(--mono)">${e.propio}</text>`;
+      curX += wP;
+    }
+
+    // Contratistas
+    const contKeys = Object.keys(e.contratas);
+    contKeys.forEach((c,ci)=>{
+      const cnt = e.contratas[c];
+      const wC = (cnt/maxVal)*trackW;
+      const gradIdx = allContratas.indexOf(c);
+      const isLast = ci===contKeys.length-1;
+      const rx = isLast ? (e.propio>0||ci>0?'0 4 4 0':'4') : '0';
+      const solidC = CONTRATA_COLORS[gradIdx%CONTRATA_COLORS.length][0];
+      rows += `<rect x="${curX.toFixed(1)}" y="${y}" width="${wC.toFixed(1)}" height="${barH}" rx="${rx}" fill="${solidC}"/>`;
+      if(wC>24) rows += `<text x="${(curX+wC/2).toFixed(1)}" y="${y+barH/2+1}" text-anchor="middle" dominant-baseline="middle"
+        font-size="10" font-weight="700" fill="#fff" font-family="var(--mono)">${cnt}</text>`;
+      curX += wC;
+    });
+
+    // Total
+    rows += `<text x="${(xTrack+trackW+5).toFixed(1)}" y="${y+barH/2+1}" dominant-baseline="middle"
+      font-size="12" font-weight="700" fill="var(--text-main)" font-family="var(--mono)">${e.total}</text>`;
+  });
+
+  el.innerHTML = legend + `<svg viewBox="0 0 ${W} ${svgH}" style="width:100%;min-width:280px;height:${svgH}px;display:block">${defs}${rows}</svg>`;
+}
+
+
 /* ── COLUMNAS APILADAS: PERSONAS POR ACTIVIDAD ── */
 function renderStackedAct(byADesglose){
   const el = document.getElementById('stacked-act');
@@ -2510,81 +2831,86 @@ function renderStackedAct(byADesglose){
     return;
   }
 
+  const allContratas = [...new Set(entries.flatMap(e=>Object.keys(e.contratas)))];
   const maxVal = Math.max(...entries.map(e=>e.total), 1);
-  // Cada fila puede tener sub-etiquetas de contratista → añadir altura extra si hay contratas
-  const barH = 24, subH = 13, gap = 10, labelW = 170, numW = 40, padT = 4;
-  const trackW = 280;
-  const W = labelW + trackW + numW + 16;
 
-  // Calcular altura total dinámica (filas con contratistas necesitan más espacio)
-  let totalSvgH = padT;
-  const rowMetas = entries.map(e=>{
-    const contKeys = Object.keys(e.contratas);
-    const extraH = contKeys.length > 0 ? contKeys.length * subH + 4 : 0;
-    const rowH = barH + gap + extraH;
-    totalSvgH += rowH;
-    return { rowH, contKeys, extraH };
-  });
+  // labelW dinámico: ~6.5px por carácter a font-size 10, mín 160, máx 340
+  const maxActLen = Math.max(...entries.map(e=>e.act.length));
+  const labelW = Math.min(340, Math.max(160, Math.ceil(maxActLen * 6.5)));
+  const trackW=260, numW=38, padL=4, padT=4, padR=4;
+  const barH=24, gap=11;
+  const W = padL + labelW + trackW + numW + padR;
+  const svgH = padT*2 + entries.length*(barH+gap) - gap;
 
-  // Leyenda
-  const legend = `<div style="display:flex;gap:1rem;margin-bottom:.6rem;font-size:10px;font-weight:600;color:var(--text-label)">
-    <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:linear-gradient(90deg,#4a9960,#1a3320);border-radius:2px;display:inline-block"></span>Propio</span>
-    <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:linear-gradient(90deg,#fbbf24,#b45309);border-radius:2px;display:inline-block"></span>Contrata</span>
-  </div>`;
+  // Colores con alto contraste entre contratistas
+  const CONTRATA_COLORS = [
+    ['#f59e0b','#78350f'],   // ámbar fuerte
+    ['#ef4444','#7f1d1d'],   // rojo
+    ['#8b5cf6','#3b0764'],   // violeta
+    ['#06b6d4','#164e63'],   // cian
+    ['#f97316','#7c2d12'],   // naranja
+    ['#ec4899','#500724'],   // rosa
+  ];
 
+  // Gradientes SVG eliminados — colores sólidos
+  const defs = '';
+
+  // Leyenda HTML
+  const legendItems = [
+    `<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:#4a9960;border-radius:2px;display:inline-block"></span>Propio</span>`,
+    ...allContratas.map((c,i)=>{
+      const [a]=CONTRATA_COLORS[i%CONTRATA_COLORS.length];
+      return `<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:${a};border-radius:2px;display:inline-block"></span>${c}</span>`;
+    })
+  ];
+  const legend = `<div style="display:flex;flex-wrap:wrap;gap:.4rem .85rem;margin-bottom:.5rem;font-size:10px;font-weight:600;color:var(--text-label)">${legendItems.join('')}</div>`;
+
+  // Filas
   let rows = '';
-  let curY = padT;
+  entries.forEach((e,i)=>{
+    const y = padT + i*(barH+gap);
+    const xTrack = padL + labelW;
+    const truncAct = e.act;
 
-  entries.forEach((e, i)=>{
-    const { contKeys, extraH } = rowMetas[i];
-    const y = curY;
-    const wP = e.propio/maxVal*trackW;
-    const wC = e.contrata/maxVal*trackW;
-    const truncAct = e.act.length>26 ? e.act.slice(0,24)+'…' : e.act;
+    rows += `<text x="${padL+labelW-6}" y="${y+barH/2+1}" text-anchor="end" dominant-baseline="middle"
+      font-size="10" font-weight="600" fill="var(--text-main)" font-family="var(--font)">${truncAct}</text>`;
+    rows += `<rect x="${xTrack}" y="${y}" width="${trackW}" height="${barH}" rx="4" fill="var(--border-base)" opacity=".35"/>`;
 
-    rows += `<g>
-      <text x="${labelW-6}" y="${y+barH/2+1}" text-anchor="end" dominant-baseline="middle"
-        font-size="10" fill="var(--text-sec)" font-family="var(--font)">${truncAct}</text>
-      <rect x="${labelW}" y="${y}" width="${trackW}" height="${barH}" rx="4" fill="var(--border-base)" opacity=".4"/>
-      ${wP>0?`<rect x="${labelW}" y="${y}" width="${wP.toFixed(1)}" height="${barH}" rx="${wC>0?'4 0 0 4':'4'}" fill="url(#gP${i})"/>
-        <defs><linearGradient id="gP${i}" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#4a9960"/><stop offset="100%" stop-color="#1a3320"/>
-        </linearGradient></defs>`:''}
-      ${wP>28?`<text x="${(labelW+wP/2).toFixed(1)}" y="${y+barH/2+1}" text-anchor="middle" dominant-baseline="middle"
-        font-size="9" font-weight="700" fill="#fff" font-family="var(--mono)">${e.propio}</text>`:''}
-      ${wC>0?`<rect x="${(labelW+wP).toFixed(1)}" y="${y}" width="${wC.toFixed(1)}" height="${barH}" rx="${wP>0?'0 4 4 0':'4'}" fill="url(#gC${i})"/>
-        <defs><linearGradient id="gC${i}" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#b45309"/>
-        </linearGradient></defs>`:''}
-      ${wC>28?`<text x="${(labelW+wP+wC/2).toFixed(1)}" y="${y+barH/2+1}" text-anchor="middle" dominant-baseline="middle"
-        font-size="9" font-weight="700" fill="#fff" font-family="var(--mono)">${e.contrata}</text>`:''}
-      <text x="${labelW+trackW+6}" y="${y+barH/2+1}" dominant-baseline="middle"
-        font-size="11" font-weight="700" fill="var(--text-main)" font-family="var(--mono)">${e.total}</text>`;
+    let curX = xTrack;
 
-    // Sub-etiquetas de contratista
-    if(contKeys.length > 0){
-      let subY = y + barH + 3;
-      contKeys.forEach((cont, ci)=>{
-        const cnt = e.contratas[cont];
-        const wSub = (cnt/maxVal*trackW);
-        const xSub = labelW + wP; // alineado al inicio del segmento contrata
-        rows += `<text x="${labelW-6}" y="${subY+subH/2}" text-anchor="end" dominant-baseline="middle"
-          font-size="8.5" fill="var(--text-label)" font-family="var(--font)" font-style="italic">↳ ${cont}</text>
-          <rect x="${xSub.toFixed(1)}" y="${subY}" width="${Math.max(wSub,2).toFixed(1)}" height="${subH-2}" rx="2"
-            fill="#f59e0b" opacity=".55"/>
-          <text x="${(xSub+Math.max(wSub,2)+4).toFixed(1)}" y="${subY+subH/2}" dominant-baseline="middle"
-            font-size="8.5" font-weight="600" fill="#b45309" font-family="var(--mono)">${cnt}</text>`;
-        subY += subH;
-      });
+    // Propio
+    if(e.propio>0){
+      const wP = (e.propio/maxVal)*trackW;
+      const contKeys = Object.keys(e.contratas);
+      const rx = contKeys.length>0 ? '4 0 0 4' : '4';
+      rows += `<rect x="${curX.toFixed(1)}" y="${y}" width="${wP.toFixed(1)}" height="${barH}" rx="${rx}" fill="#4a9960"/>`;
+      if(wP>24) rows += `<text x="${(curX+wP/2).toFixed(1)}" y="${y+barH/2+1}" text-anchor="middle" dominant-baseline="middle"
+        font-size="9" font-weight="700" fill="#fff" font-family="var(--mono)">${e.propio}</text>`;
+      curX += wP;
     }
 
-    rows += '</g>';
-    curY += rowMetas[i].rowH;
+    // Contratistas
+    const contKeys = Object.keys(e.contratas);
+    contKeys.forEach((c,ci)=>{
+      const cnt = e.contratas[c];
+      const wC = (cnt/maxVal)*trackW;
+      const gradIdx = allContratas.indexOf(c);
+      const isLast = ci===contKeys.length-1;
+      const rx = isLast ? (e.propio>0||ci>0 ? '0 4 4 0' : '4') : '0';
+      const solidC = CONTRATA_COLORS[gradIdx%CONTRATA_COLORS.length][0];
+      rows += `<rect x="${curX.toFixed(1)}" y="${y}" width="${wC.toFixed(1)}" height="${barH}" rx="${rx}" fill="${solidC}"/>`;
+      if(wC>24) rows += `<text x="${(curX+wC/2).toFixed(1)}" y="${y+barH/2+1}" text-anchor="middle" dominant-baseline="middle"
+        font-size="9" font-weight="700" fill="#fff" font-family="var(--mono)">${cnt}</text>`;
+      curX += wC;
+    });
+
+    // Total
+    rows += `<text x="${(xTrack+trackW+5).toFixed(1)}" y="${y+barH/2+1}" dominant-baseline="middle"
+      font-size="11" font-weight="700" fill="var(--text-main)" font-family="var(--mono)">${e.total}</text>`;
   });
 
-  el.innerHTML = legend + `<svg viewBox="0 0 ${W} ${totalSvgH}" style="width:100%;min-width:360px;height:${totalSvgH}px;display:block">${rows}</svg>`;
+  el.innerHTML = legend + `<svg viewBox="0 0 ${W} ${svgH}" style="width:100%;min-width:300px;height:${svgH}px;display:block">${defs}${rows}</svg>`;
 }
-
 /* ── PIE CHART PERSONAL POR ÁREA ── */
 function renderAreaPie(byArea){
   const svg = document.getElementById('area-pie-svg');
@@ -2595,7 +2921,7 @@ function renderAreaPie(byArea){
   const entries = Object.entries(byArea).sort((a,b)=>b[1]-a[1]);
   const total = entries.reduce((s,[,v])=>s+v, 0);
 
-  if(totalEl) totalEl.textContent = total ? `Total trabajadores: ${total}` : '';
+  if(totalEl) totalEl.textContent = '';
 
   if(!entries.length || !total){
     svg.innerHTML = `<circle cx="100" cy="100" r="98" fill="var(--border-base)" opacity=".3"/>
@@ -2636,27 +2962,29 @@ function renderAreaPie(byArea){
       <title>${k}: ${v} personas (${Math.round(pct*100)}%)</title>
     </path>`;
 
-    // Etiqueta en el segmento si es grande (>8%)
-    if(pct > 0.08){
-      const midAngle = startAngle + sweep/2;
-      const [lx,ly] = polar(midAngle, r*0.62);
-      labelLines += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle"
-        dominant-baseline="middle" font-size="9" font-weight="700"
-        fill="#fff" font-family="var(--font)" pointer-events="none">${Math.round(pct*100)}%</text>`;
-    }
+
 
     startAngle = endAngle;
   });
 
   svg.innerHTML = paths + labelLines;
 
+  // Ajustar tamaño del SVG al espacio disponible del card
+  requestAnimationFrame(()=>{
+    const wrap = document.getElementById('area-pie-wrap');
+    const container = document.getElementById('area-pie-container');
+    if(wrap && container){
+      const h = Math.max(80, Math.min(wrap.clientHeight, 200));
+      svg.style.width  = h+'px';
+      svg.style.height = h+'px';
+    }
+  });
+
   legend.innerHTML = entries.map(([k,v],i)=>{
-    const pct = Math.round(v/total*100);
-    return `<div style="display:flex;align-items:center;gap:6px;font-size:10.5px">
+    return `<div style="display:flex;align-items:center;gap:5px;font-size:10.5px">
       <span style="width:9px;height:9px;border-radius:2px;background:${COLORS[i%COLORS.length]};flex-shrink:0;display:inline-block"></span>
       <span style="flex:1;color:var(--text-sec);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${k}">${k}</span>
-      <span style="font-weight:700;color:var(--text-main);font-family:var(--mono);font-size:11px">${v}</span>
-      <span style="color:var(--text-label);font-size:10px;width:28px;text-align:right">${pct}%</span>
+      <span style="font-weight:700;color:var(--text-main);font-family:var(--mono);font-size:11px;flex-shrink:0;min-width:2ch;text-align:right">${v}</span>
     </div>`;
   }).join('');
 }
@@ -2687,15 +3015,26 @@ function renderResumen(regs){
   });
   const rows = Object.values(map).sort((a,b)=>b.personas-a.personas);
   tbody.innerHTML = rows.map(r=>{
+    const CONT_PALETTE=[
+      {bg:'#fff7ed',color:'#c2410c',border:'#fed7aa'},
+      {bg:'#fef2f2',color:'#b91c1c',border:'#fecaca'},
+      {bg:'#f5f3ff',color:'#6d28d9',border:'#ddd6fe'},
+      {bg:'#ecfeff',color:'#0e7490',border:'#a5f3fc'},
+      {bg:'#fff7ed',color:'#c2410c',border:'#fed7aa'},
+      {bg:'#fdf2f8',color:'#9d174d',border:'#fbcfe8'},
+    ];
+    const allContNames=[...new Set(regs.filter(r2=>r2.tipo==='Contrata').map(r2=>r2.contratista||'Sin contratista'))];
     const contDetalle = r.contrata
-      ? Object.entries(r.contratasMap).map(([c,n])=>
-          `<span style="display:inline-flex;align-items:center;gap:3px;background:#fef3c7;color:#b45309;border:1px solid #fcd34d;border-radius:12px;padding:1px 7px;font-size:10px;font-weight:600;white-space:nowrap">${c}: ${n}</span>`
-        ).join(' ')
+      ? Object.entries(r.contratasMap).map(([c,n])=>{
+          const idx=allContNames.indexOf(c);
+          const pal=CONT_PALETTE[idx%CONT_PALETTE.length];
+          return `<span style="display:inline-flex;align-items:center;gap:3px;background:${pal.bg};color:${pal.color};border:1px solid ${pal.border};border-radius:12px;padding:1px 7px;font-size:10px;font-weight:600;white-space:nowrap">${c}: ${n}</span>`;
+        }).join(' ')
       : '—';
     return `<tr>
       <td style="font-weight:500;color:var(--text-main)">${r.actividad}</td>
       <td style="font-family:var(--mono);color:var(--text-sec);font-size:11px">${[...r.lotes].sort((a,b)=>+a-+b).join(', ')||'—'}</td>
-      <td style="text-align:center"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:22px;border-radius:6px;background:var(--primary-bg);color:var(--green-dark);font-weight:700;font-size:12px;font-family:var(--mono);padding:0 5px">${r.personas}</span></td>
+      <td style="text-align:center;font-weight:700;font-size:12px;font-family:var(--mono);color:var(--green-dark)">${r.personas}</td>
       <td style="text-align:center;color:#16a34a;font-weight:600;font-family:var(--mono)">${r.propio||'—'}</td>
       <td style="text-align:center;color:#b45309;font-weight:600;font-family:var(--mono)">${r.contrata||'—'}</td>
       <td style="font-size:11px">${contDetalle}</td>
@@ -3051,12 +3390,16 @@ function ssRenderList(id, q){
   if(!list) return;
   const data = SS_DATA[id] || [];
   const filtered = q ? data.filter(o=>o.toLowerCase().includes(q)) : data;
+  const cur = document.getElementById(id)?.value;
+  // Opción "Todas" para filtros del dashboard
+  const todasRow = (id==='fil-dash-act'&&!q)
+    ? `<div class="ss-opt${!cur?' selected':''}" onclick="ssPick('${id}','')">Todas las actividades</div>`
+    : '';
   if(!filtered.length){
-    list.innerHTML=`<div class="ss-empty">Sin resultados</div>`;
+    list.innerHTML= todasRow || `<div class="ss-empty">Sin resultados</div>`;
     return;
   }
-  const cur = document.getElementById(id)?.value;
-  list.innerHTML = filtered.map(o=>`
+  list.innerHTML = todasRow + filtered.map(o=>`
     <div class="ss-opt${cur===o?' selected':''}" onclick="ssPick('${id}','${o.replace(/'/g,"\'")}')">
       ${o}
     </div>`).join('');
@@ -3068,6 +3411,7 @@ function ssPick(id, val){
   if(inp) inp.value = val;
   if(hid) hid.value = val;
   ssCloseAll();
+  if(id==='fil-dash-act') renderInicio();
 }
 
 /* ── TOGGLE CONTRATISTA ── */
@@ -3770,7 +4114,23 @@ function confirmarElim(){if(S.confirmCb)S.confirmCb();cerrarConfirm();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){cerrarModalUser();cerrarModalCultivo();cerrarModalActividad();cerrarModalImport();cerrarModalContrata();ssCloseAll();cerrarConfirm();}});
 
 /* INIT */
-function iniciarApp(){applySidebarState();renderInicio();initForm();cargarRegistros();}
+function iniciarApp(){
+  applySidebarState();
+  renderInicio();
+  initForm();
+  cargarRegistros();
+  // Reajustar pie cuando cambia el tamaño del contenedor
+  const wrap = document.getElementById('area-pie-wrap');
+  if(wrap && window.ResizeObserver){
+    new ResizeObserver(()=>{
+      const svg = document.getElementById('area-pie-svg');
+      if(!svg) return;
+      const h = Math.max(80, Math.min(wrap.clientHeight, 200));
+      svg.style.width  = h+'px';
+      svg.style.height = h+'px';
+    }).observe(wrap);
+  }
+}
 
 /* script temporal para pruebas */
 
@@ -3795,6 +4155,387 @@ window.onload = function() {
   iniciarApp();
 };
 /* ============================= */
+
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE — Estado y navegación
+═══════════════════════════════════════════════════════ */
+let mobLotes = [];
+
+function isMobile(){ return window.innerWidth <= 768; }
+
+function goMobPage(page, activeBtn){
+  document.querySelectorAll('.mob-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('mob-page-'+page).classList.add('active');
+  // Resetear todos los botones de nav
+  document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
+  if(activeBtn) activeBtn.classList.add('active');
+  if(page==='dashboard') renderMobDashboard();
+  if(page==='nuevo') initMobForm();
+}
+
+function initMobUI(){
+  if(!isMobile()) return;
+  // Inicializar fecha de dashboard con hoy
+  const fd = document.getElementById('mob-fil-fecha');
+  if(fd && !fd.value) fd.value = isoHoy();
+  renderMobDashboard();
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE — Dashboard
+═══════════════════════════════════════════════════════ */
+function renderMobDashboard(){
+  const fecha = document.getElementById('mob-fil-fecha')?.value || isoHoy();
+  const regs = S.registros.filter(r => r.fecha === fecha);
+  const total = regs.reduce((s,r)=>s+(parseInt(r.nPersonas)||0), 0);
+  const propio = regs.filter(r=>r.tipo==='Propio').reduce((s,r)=>s+(parseInt(r.nPersonas)||0), 0);
+  const contrata = regs.filter(r=>r.tipo==='Contrata').reduce((s,r)=>s+(parseInt(r.nPersonas)||0), 0);
+  const pctP = total ? Math.round(propio/total*100) : 0;
+  const pctC = total ? Math.round(contrata/total*100) : 0;
+
+  // Header
+  const d = new Date(fecha+'T12:00:00');
+  const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const sub = dias[d.getDay()]+' '+d.getDate()+' '+meses[d.getMonth()]+' '+d.getFullYear();
+  const subEl = document.getElementById('mob-fecha-sub');
+  if(subEl) subEl.textContent = sub;
+  const pill = document.getElementById('mob-total-pill');
+  if(pill) pill.textContent = total + ' persona'+(total!==1?'s':'');
+
+  // KPIs
+  const set = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  set('mk-total', total||'—');
+  set('mk-total-sub', regs.length+' registro'+(regs.length!==1?'s':''));
+  set('mk-propio', propio||'—');
+  set('mk-propio-sub', pctP+'% del total');
+  set('mk-contrata', contrata||'—');
+  set('mk-contrata-sub', pctC+'% del total');
+
+  // Foco operativo
+  const byA = {};
+  regs.forEach(r=>{ if(r.actividad) byA[r.actividad]=(byA[r.actividad]||0)+(parseInt(r.nPersonas)||0); });
+  const actEntries = Object.entries(byA);
+  if(actEntries.length && total){
+    const [focoAct, focoCnt] = actEntries.reduce((a,b)=>b[1]>a[1]?b:a);
+    const focoPct = Math.round(focoCnt/total*100);
+    set('mk-foco', focoAct);
+    set('mk-foco-sub', 'Concentra el '+focoPct+'%');
+    const fp = document.getElementById('mk-foco-prog');
+    if(fp) setTimeout(()=>{ fp.style.width=focoPct+'%'; }, 100);
+  } else {
+    set('mk-foco','—'); set('mk-foco-sub','Sin actividad');
+  }
+
+  // Barras de progreso
+  setTimeout(()=>{
+    const pp=document.getElementById('mk-propio-prog');
+    const cp=document.getElementById('mk-contrata-prog');
+    if(pp) pp.style.width=pctP+'%';
+    if(cp) cp.style.width=pctC+'%';
+  }, 100);
+
+  // Lista actividades
+  const actList = document.getElementById('mob-act-list');
+  if(actList){
+    const sorted = actEntries.sort((a,b)=>b[1]-a[1]);
+    const maxA = sorted[0]?.[1] || 1;
+    if(!sorted.length){
+      actList.innerHTML = '<div class="mob-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div>Sin actividad para esta fecha</div></div>';
+    } else {
+      actList.innerHTML = sorted.map(([act,cnt])=>`
+        <div class="mob-act-item">
+          <div class="mob-act-name" title="${act}">${act}</div>
+          <div class="mob-act-bar-wrap"><div class="mob-act-bar-track"><div class="mob-act-bar-fill" style="width:${Math.round(cnt/maxA*100)}%"></div></div></div>
+          <div class="mob-act-count">${cnt}</div>
+        </div>`).join('');
+    }
+  }
+
+  // Lista responsables
+  const byR = {};
+  regs.forEach(r=>{ if(r.responsable) byR[r.responsable]=(byR[r.responsable]||0)+(parseInt(r.nPersonas)||0); });
+  const respList = document.getElementById('mob-resp-list');
+  if(respList){
+    const sorted = Object.entries(byR).sort((a,b)=>b[1]-a[1]);
+    if(!sorted.length){
+      respList.innerHTML = '<div class="mob-empty">Sin datos</div>';
+    } else {
+      respList.innerHTML = sorted.map(([nombre,cnt])=>`
+        <div class="mob-resp-item">
+          <div class="mob-resp-av">${nombre.charAt(0).toUpperCase()}</div>
+          <div class="mob-resp-name">${nombre}</div>
+          <div class="mob-resp-count">${cnt}</div>
+        </div>`).join('');
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE — Formulario Nuevo Registro
+═══════════════════════════════════════════════════════ */
+function initMobForm(){
+  // Fecha por defecto
+  const fd = document.getElementById('mf-fecha');
+  if(fd && !fd.value) fd.value = isoHoy();
+  // Hora por defecto
+  const fh = document.getElementById('mf-hora');
+  if(fh && !fh.value) fh.value = horaAhora();
+  // Cargar ss
+  ssLoad('mf-area', DB.maestros.areas.map?DB.maestros.areas : []);
+  ssLoad('mf-resp', (DB.maestros.responsables||[]).map(r=>typeof r==='string'?r:(r.nombreCorto||r.nombres||'')).filter(Boolean));
+  ssLoad('mf-act', (DB.maestros.actividades||[]).map(a=>typeof a==='string'?a:(a.actividad||'')).filter(Boolean));
+  ssLoad('mf-contratista', (DB.maestros.contratas||[]).map(c=>typeof c==='string'?c:(c.nombreCorto||c.razon||'')).filter(Boolean));
+  // Sub header
+  const sub = document.getElementById('mob-form-fecha-sub');
+  if(sub) sub.textContent = fechaLarga();
+  // Lotes
+  mobLotes = [];
+  renderMobLotesBtn();
+  renderMobLotesDD();
+}
+
+function toggleMobContratista(){
+  const tipo = document.getElementById('mf-tipo')?.value;
+  const field = document.getElementById('mfield-contratista');
+  if(field) field.style.display = tipo==='Contrata' ? '' : 'none';
+  if(tipo!=='Contrata') ssReset('mf-contratista');
+}
+
+function toggleMobLotesDD(){
+  const dd = document.getElementById('mob-lotes-dropdown');
+  if(!dd) return;
+  const open = dd.style.display !== 'none';
+  dd.style.display = open ? 'none' : 'block';
+  if(!open) renderMobLotesDD();
+}
+
+function renderMobLotesDD(){
+  const dd = document.getElementById('mob-lotes-dropdown');
+  if(!dd) return;
+  // Reusar los mismos lotes del sistema
+  const grupos = getGruposModulo();
+  const todos = grupos.flatMap(g=>g.lotes);
+  if(!todos.length){ dd.innerHTML='<div style="padding:14px;text-align:center;font-size:12px;color:var(--text-muted)">Sin lotes configurados</div>'; return; }
+  dd.innerHTML = todos.map(l=>{
+    const sel = mobLotes.includes(l.n);
+    return `<div onclick="toggleMobLote(${l.n})" style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;border-bottom:.5px solid var(--border-base);background:${sel?'var(--primary-bg)':'transparent'}">
+      <span style="width:16px;height:16px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:2px solid ${sel?'var(--green-bright)':'var(--border-hover)'};background:${sel?'var(--green-bright)':'transparent'}">${sel?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</span>
+      <span style="font-size:13px;font-weight:700;color:var(--text-main);width:32px">${l.n}</span>
+      <div style="flex:1"><div style="font-size:12px;color:var(--text-sec)">${l.cult||'—'}</div><div style="font-size:11px;color:var(--text-muted)">${l.modulo}</div></div>
+      ${l.ha?`<span style="font-size:11px;color:var(--text-muted)">${parseFloat(l.ha).toFixed(2)} ha</span>`:''}
+    </div>`;
+  }).join('');
+}
+
+function toggleMobLote(n){
+  const i = mobLotes.indexOf(n);
+  if(i>=0) mobLotes.splice(i,1); else mobLotes.push(n);
+  mobLotes.sort((a,b)=>a-b);
+  renderMobLotesDD();
+  renderMobLotesBtn();
+  renderMobLotesTags();
+}
+
+function renderMobLotesBtn(){
+  const lbl = document.getElementById('mob-lotes-btn-label');
+  if(!lbl) return;
+  lbl.textContent = mobLotes.length ? mobLotes.length+' lote'+(mobLotes.length>1?'s':'')+' seleccionado'+(mobLotes.length>1?'s':'') : 'Seleccionar lotes…';
+}
+
+function renderMobLotesTags(){
+  const tags = document.getElementById('mob-lotes-tags');
+  if(!tags) return;
+  tags.innerHTML = mobLotes.map(n=>`<span style="display:inline-flex;align-items:center;gap:4px;background:var(--primary-bg);color:var(--green-dark);border:1px solid var(--primary-b);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600">Lote ${n}<button type="button" onclick="toggleMobLote(${n})" style="background:none;border:none;cursor:pointer;color:var(--green-mid);padding:0;font-size:13px;line-height:1;display:flex">&times;</button></span>`).join('');
+}
+
+async function guardarRegistroMob(){
+  const fecha = document.getElementById('mf-fecha').value;
+  const area = document.getElementById('mf-area').value;
+  const resp = document.getElementById('mf-resp').value;
+  const tipo = document.getElementById('mf-tipo').value;
+  const contratista = document.getElementById('mf-contratista').value;
+  const act = document.getElementById('mf-act').value;
+  const np = parseInt(document.getElementById('mf-np').value)||0;
+  const hora = document.getElementById('mf-hora').value;
+  const horaFin = document.getElementById('mf-hora-fin')?.value||'';
+  const tarea = document.getElementById('mf-tarea')?.value.trim()||'';
+  const obs = document.getElementById('mf-obs').value.trim();
+  const errEl = document.getElementById('mf-err');
+  const okEl = document.getElementById('mf-ok');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+  if(!area||!resp||!tipo||!act||!np||!hora||!mobLotes.length){
+    document.getElementById('mf-err-t').textContent='Completa todos los campos y selecciona al menos un lote.';
+    errEl.classList.add('show'); return;
+  }
+  const lotesStr = mobLotes.join(', ');
+  const reg = {fecha,hora,horaFin,area,responsable:resp,lotes:lotesStr,tipo,contratista:tipo==='Contrata'?contratista:'',actividad:act,tarea,nPersonas:np,obs,registradoPor:S.usuario?.nombre||'',timestamp:new Date().toISOString()};
+  const btn = document.getElementById('mob-btn-guardar');
+  btn.disabled = true; btn.textContent = 'Guardando…';
+  try{
+    await enviarASheets(reg);
+    S.registros.push(reg);
+    save();
+    okEl.classList.add('show');
+    // Reset form
+    document.getElementById('mf-np').value='';
+    document.getElementById('mf-tarea').value='';
+    document.getElementById('mf-obs').value='';
+    ['mf-area','mf-resp','mf-act','mf-contratista'].forEach(id=>ssReset(id));
+    document.getElementById('mf-tipo').value='';
+    toggleMobContratista();
+    mobLotes=[];
+    renderMobLotesBtn(); renderMobLotesTags();
+    document.getElementById('mob-lotes-dropdown').style.display='none';
+    setTimeout(()=>okEl.classList.remove('show'),4000);
+  }catch(e){
+    document.getElementById('mf-err-t').textContent='Error de red. Verifica tu conexión.';
+    errEl.classList.add('show');
+  }finally{
+    btn.disabled=false; btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar Registro';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   REPORTES — Edición y eliminación (solo admin)
+═══════════════════════════════════════════════════════ */
+let regSeleccionados = new Set();
+let editRegIdx = null;
+
+function toggleAllRegs(cb){
+  const regs = filtrar();
+  regSeleccionados.clear();
+  if(cb.checked) regs.forEach(r=>regSeleccionados.add(r.timestamp));
+  renderReportes();
+}
+
+function toggleRegSel(timestamp){
+  if(regSeleccionados.has(timestamp)) regSeleccionados.delete(timestamp);
+  else regSeleccionados.add(timestamp);
+  actualizarBarraAcciones();
+}
+
+function actualizarBarraAcciones(){
+  const isAdmin = S.usuario?.rol==='admin';
+  const bar = document.getElementById('rep-actions-bar');
+  const cnt = document.getElementById('rep-sel-count');
+  if(bar) bar.style.display = (isAdmin && regSeleccionados.size>0) ? 'flex' : 'none';
+  if(cnt) cnt.textContent = regSeleccionados.size+' seleccionado'+(regSeleccionados.size!==1?'s':'');
+  // Checkbox "todos"
+  const allChk = document.getElementById('chk-all-reg');
+  if(allChk){
+    const total = filtrar().length;
+    allChk.indeterminate = regSeleccionados.size>0 && regSeleccionados.size<total;
+    allChk.checked = total>0 && regSeleccionados.size===total;
+  }
+}
+
+function abrirEditReg(timestamp){
+  const isAdmin = S.usuario?.rol==='admin';
+  if(!isAdmin){ toast('Solo el administrador puede editar registros','err'); return; }
+  const idx = S.registros.findIndex(r=>r.timestamp===timestamp);
+  if(idx<0) return;
+  editRegIdx = idx;
+  const r = S.registros[idx];
+  // Cargar ss
+  ssLoad('er-area', DB.maestros.areas||[]);
+  ssLoad('er-resp', (DB.maestros.responsables||[]).map(x=>typeof x==='string'?x:(x.nombreCorto||x.nombres||'')).filter(Boolean));
+  ssLoad('er-act', (DB.maestros.actividades||[]).map(a=>typeof a==='string'?a:(a.actividad||'')).filter(Boolean));
+  ssLoad('er-contratista', (DB.maestros.contratas||[]).map(c=>typeof c==='string'?c:(c.nombreCorto||c.razon||'')).filter(Boolean));
+  // Prellenar campos
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v!=null?v:'';};
+  set('er-fecha',r.fecha); set('er-hora',r.hora); set('er-hora-fin',r.horaFin||'');
+  // ss fields
+  ['area','resp','act','contratista'].forEach(f=>{
+    const hid=document.getElementById('er-'+f);
+    const vis=document.getElementById('ss-er-'+f);
+    const val = f==='area'?r.area:f==='resp'?r.responsable:f==='act'?r.actividad:r.contratista||'';
+    if(hid) hid.value=val;
+    if(vis) vis.value=val;
+  });
+  set('er-tipo',r.tipo||'Propio');
+  set('er-np',r.nPersonas); set('er-tarea',r.tarea||''); set('er-lotes',r.lotes||''); set('er-obs',r.obs||'');
+  toggleEditContratista();
+  document.getElementById('modal-edit-reg').classList.add('open');
+}
+
+function cerrarEditReg(){
+  document.getElementById('modal-edit-reg').classList.remove('open');
+  editRegIdx = null;
+  ssCloseAll();
+}
+
+function toggleEditContratista(){
+  const tipo = document.getElementById('er-tipo')?.value;
+  const field = document.getElementById('er-field-contratista');
+  if(field) field.style.display = tipo==='Contrata' ? '' : 'none';
+  if(tipo!=='Contrata') ssReset('er-contratista');
+}
+
+async function guardarEditReg(){
+  if(editRegIdx===null) return;
+  const get = id => document.getElementById(id)?.value||'';
+  const np = parseInt(get('er-np'))||0;
+  if(!get('er-fecha')||!get('er-area')||!get('er-resp')||!get('er-tipo')||!get('er-act')||!np){
+    toast('Completa todos los campos obligatorios','err'); return;
+  }
+  const reg = S.registros[editRegIdx];
+  // Actualizar campos
+  reg.fecha=get('er-fecha'); reg.hora=get('er-hora'); reg.horaFin=get('er-hora-fin');
+  reg.area=get('er-area'); reg.responsable=get('er-resp'); reg.tipo=get('er-tipo');
+  reg.contratista=get('er-tipo')==='Contrata'?get('er-contratista'):'';
+  reg.actividad=get('er-act'); reg.nPersonas=np; reg.tarea=get('er-tarea');
+  reg.lotes=get('er-lotes'); reg.obs=get('er-obs');
+  reg.editadoPor=S.usuario?.nombre||''; reg.editTimestamp=new Date().toISOString();
+  save();
+  const btn = document.querySelector('#modal-edit-reg .btn-primary');
+  if(btn){btn.disabled=true;btn.textContent='Guardando…';}
+  try{
+    await reemplazarRegistrosEnSheets();
+    cerrarEditReg();
+    renderReportes();
+    toast('Registro actualizado ✓','ok');
+  }catch(e){
+    toast('Error al sincronizar con Sheets','err');
+    cerrarEditReg(); renderReportes();
+  }finally{
+    if(btn){btn.disabled=false;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar cambios';}
+  }
+}
+
+function eliminarRegistrosSeleccionados(){
+  const isAdmin = S.usuario?.rol==='admin';
+  if(!isAdmin || !regSeleccionados.size) return;
+  abrirConfirm('Eliminar <strong>'+regSeleccionados.size+'</strong> registro(s) seleccionado(s)?<br><small style="color:var(--text-muted)">Esta acción también actualizará Google Sheets.</small>',async()=>{
+    S.registros = S.registros.filter(r=>!regSeleccionados.has(r.timestamp));
+    regSeleccionados.clear();
+    save();
+    renderReportes();
+    try{
+      await reemplazarRegistrosEnSheets();
+      toast('Registros eliminados y Sheets actualizado ✓','ok');
+    }catch(e){
+      toast('Eliminados localmente. Error al sincronizar Sheets.','err');
+    }
+  });
+}
+
+async function reemplazarRegistrosEnSheets(){
+  const ctrl = new AbortController();
+  const tid = setTimeout(()=>ctrl.abort(), 20000);
+  try{
+    const headers = ['Fecha','Hora Inicio','Hora Término','Área','Responsable','Lote(s)','Tipo Personal','Contratista','Actividad','Tarea/Meta','N° Personas','Observaciones','Registrado por','Timestamp'];
+    const filas = S.registros.map(r=>[r.fecha,r.hora,r.horaFin||'',r.area,r.responsable,r.lotes||'',r.tipo,r.contratista||'',r.actividad,r.tarea||'',r.nPersonas,r.obs||'',r.registradoPor||'',r.timestamp||'']);
+    const body = JSON.stringify({accion:'reemplazar',sheet:'Registros',datos:[headers,...filas]});
+    const res = await fetch(CFG.APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body,signal:ctrl.signal});
+    clearTimeout(tid);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json = await res.json();
+    if(json.status!=='ok') throw new Error(json.message||'Error');
+    sync('ok','sincronizado');
+  }catch(e){clearTimeout(tid);sync('err','error');throw e;}
+}
 
 </script>
 </body>
