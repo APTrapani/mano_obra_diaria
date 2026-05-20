@@ -762,6 +762,10 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
         </div>
         <div class="rep-actions-bar" id="rep-actions-bar" style="display:none">
           <span class="rep-sel-count" id="rep-sel-count">0 seleccionados</span>
+          <button class="btn btn-ghost btn-sm" onclick="regSeleccionados.clear();renderReportes()" title="Cancelar selección">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Cancelar
+          </button>
           <button class="btn btn-danger btn-sm" onclick="eliminarRegistrosSeleccionados()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             Eliminar seleccionados
@@ -799,6 +803,144 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
 
     </div>
   </div>
+
+  <!-- ══════════════════════════════════════
+       VISTAS MÓVILES (solo ≤768px)
+  ══════════════════════════════════════ -->
+  <div id="mob-page-dashboard" class="mob-page active">
+    <div class="mob-header">
+      <div class="mob-header-top">
+        <div>
+          <div class="mob-header-title">🍋 AgroPlanner</div>
+          <div class="mob-header-sub" id="mob-fecha-sub">—</div>
+        </div>
+        <div class="mob-header-pill" id="mob-total-pill">— personas</div>
+      </div>
+    </div>
+    <div class="mob-body">
+      <div class="mob-date-bar">
+        <label>Fecha</label>
+        <input type="date" id="mob-fil-fecha" onchange="renderMobDashboard()">
+      </div>
+      <div class="mob-kpi-grid">
+        <div class="mob-kpi">
+          <div class="mob-kpi-deco" style="background:var(--green-dark)"></div>
+          <div class="mob-kpi-n" id="mk-total">—</div>
+          <div class="mob-kpi-l">En campo</div>
+          <div class="mob-kpi-sub" id="mk-total-sub">—</div>
+          <div class="mob-kpi-prog"><div class="mob-kpi-prog-fill" id="mk-total-prog" style="width:100%;background:linear-gradient(90deg,var(--green-bright),var(--green-mid))"></div></div>
+        </div>
+        <div class="mob-kpi">
+          <div class="mob-kpi-deco" style="background:var(--green-bright)"></div>
+          <div class="mob-kpi-n" id="mk-propio">—</div>
+          <div class="mob-kpi-l">Propio</div>
+          <div class="mob-kpi-sub" id="mk-propio-sub">—</div>
+          <div class="mob-kpi-prog"><div class="mob-kpi-prog-fill" id="mk-propio-prog" style="width:0%;background:#4a9960"></div></div>
+        </div>
+        <div class="mob-kpi">
+          <div class="mob-kpi-deco" style="background:var(--amber)"></div>
+          <div class="mob-kpi-n" id="mk-contrata">—</div>
+          <div class="mob-kpi-l">Contrata</div>
+          <div class="mob-kpi-sub" id="mk-contrata-sub">—</div>
+          <div class="mob-kpi-prog"><div class="mob-kpi-prog-fill" id="mk-contrata-prog" style="width:0%;background:#f59e0b"></div></div>
+        </div>
+        <div class="mob-kpi">
+          <div class="mob-kpi-deco" style="background:var(--blue)"></div>
+          <div class="mob-kpi-n-txt" id="mk-foco">—</div>
+          <div class="mob-kpi-l">Foco operativo</div>
+          <div class="mob-kpi-sub" id="mk-foco-sub">—</div>
+          <div class="mob-kpi-prog"><div class="mob-kpi-prog-fill" id="mk-foco-prog" style="width:0%;background:#60a5fa"></div></div>
+        </div>
+      </div>
+      <div class="mob-sec-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Personas por actividad
+      </div>
+      <div class="mob-act-list" id="mob-act-list"></div>
+      <div class="mob-sec-title" style="margin-top:.5rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Personas por responsable
+      </div>
+      <div class="mob-resp-list" id="mob-resp-list"></div>
+    </div>
+    <nav class="mob-nav">
+      <button class="mob-nav-btn active" id="mob-nav-dash" onclick="goMobPage('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="mob-nav-btn" id="mob-nav-nuevo" onclick="goMobPage('nuevo',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Registro
+      </button>
+    </nav>
+  </div>
+
+  <div id="mob-page-nuevo" class="mob-page">
+    <div class="mob-form-header">
+      <div class="mob-form-title">Nuevo Registro</div>
+      <div class="mob-form-sub" id="mob-form-fecha-sub">—</div>
+    </div>
+    <div class="mob-form-body">
+      <div style="font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-base)">Datos generales</div>
+      <div class="field"><label>Fecha</label><input type="date" id="mf-fecha"></div>
+      <div class="field"><label>Área</label>
+        <div class="ss-wrap" id="ss-wrap-mf-area"><input class="ss-input" id="ss-mf-area" placeholder="Seleccionar área…" readonly onclick="ssToggle('mf-area')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-area',this.value)" id="ss-search-mf-area"><div class="ss-list" id="ss-list-mf-area"></div></div></div>
+        <input type="hidden" id="mf-area">
+      </div>
+      <div class="field"><label>Responsable</label>
+        <div class="ss-wrap" id="ss-wrap-mf-resp"><input class="ss-input" id="ss-mf-resp" placeholder="Seleccionar responsable…" readonly onclick="ssToggle('mf-resp')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-resp',this.value)" id="ss-search-mf-resp"><div class="ss-list" id="ss-list-mf-resp"></div></div></div>
+        <input type="hidden" id="mf-resp">
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.06em;margin:.5rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-base)">Trabajo del día</div>
+      <div class="field"><label>Tipo de personal</label>
+        <select id="mf-tipo" onchange="toggleMobContratista()" style="width:100%;padding:10px 12px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:16px;font-family:var(--font);color:var(--text-main);outline:none;appearance:none;-webkit-appearance:none">
+          <option value="">Seleccionar…</option><option value="Propio">Propio</option><option value="Contrata">Contrata</option>
+        </select>
+      </div>
+      <div class="field" id="mfield-contratista" style="display:none"><label>Contratista</label>
+        <div class="ss-wrap" id="ss-wrap-mf-contratista"><input class="ss-input" id="ss-mf-contratista" placeholder="Seleccionar contratista…" readonly onclick="ssToggle('mf-contratista')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-contratista',this.value)" id="ss-search-mf-contratista"><div class="ss-list" id="ss-list-mf-contratista"></div></div></div>
+        <input type="hidden" id="mf-contratista">
+      </div>
+      <div class="field"><label>Actividad</label>
+        <div class="ss-wrap" id="ss-wrap-mf-act"><input class="ss-input" id="ss-mf-act" placeholder="Seleccionar actividad…" readonly onclick="ssToggle('mf-act')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-act',this.value)" id="ss-search-mf-act"><div class="ss-list" id="ss-list-mf-act"></div></div></div>
+        <input type="hidden" id="mf-act">
+      </div>
+      <div class="field"><label>Tarea / Meta</label><input type="number" id="mf-tarea" min="0" step="any" placeholder="0" inputmode="decimal" style="font-size:16px"></div>
+      <div class="field"><label>N° personas</label><input type="number" id="mf-np" min="1" max="999" placeholder="0" inputmode="numeric" style="font-size:16px"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="field"><label>Hora inicio</label><input type="time" id="mf-hora" style="font-size:16px"></div>
+        <div class="field"><label>Hora término</label><input type="time" id="mf-hora-fin" style="font-size:16px"></div>
+      </div>
+      <div class="field"><label>Lotes / Ubicación</label>
+        <button type="button" id="mob-lotes-btn" onclick="toggleMobLotesDD()" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:16px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left">
+          <span id="mob-lotes-btn-label">Seleccionar lotes…</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="mob-lotes-dropdown" style="display:none;border:1px solid var(--border-hover);border-top:none;border-radius:0 0 var(--r) var(--r);max-height:260px;overflow-y:auto;background:var(--bg-panel)"></div>
+        <div id="mob-lotes-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+      </div>
+      <div class="field"><label>Observaciones (Opcional)</label><textarea id="mf-obs" placeholder="Condiciones, metas, incidencias…" style="font-size:16px;min-height:80px"></textarea></div>
+      <div id="mf-err" class="alert alert-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="mf-err-t">Completa todos los campos.</span></div>
+      <div id="mf-ok" class="alert alert-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Registro guardado.</div>
+    </div>
+    <div class="mob-form-footer">
+      <button class="mob-btn-guardar" id="mob-btn-guardar" onclick="guardarRegistroMob()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar Registro
+      </button>
+    </div>
+    <nav class="mob-nav">
+      <button class="mob-nav-btn" onclick="goMobPage('dashboard',document.getElementById('mob-nav-dash'))">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="mob-nav-btn active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Registro
+      </button>
+    </nav>
+  </div>
+
 </div>
 
 
