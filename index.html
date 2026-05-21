@@ -318,7 +318,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
   #page-inicio.active,#page-nuevo.active,#page-reportes.active{display:none!important}
 
   /* Páginas móviles */
-  .mob-page{display:none;flex-direction:column;height:100%;animation:fadeIn .2s ease}
+  .mob-page{display:none;flex-direction:column;height:calc(100dvh - 56px);overflow:hidden;animation:fadeIn .2s ease;position:fixed;top:0;left:0;right:0;bottom:56px}
   .mob-page.active{display:flex}
 
   /* Bottom nav */
@@ -336,7 +336,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
   .mob-header-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;color:#fff}
 
   /* Scroll body */
-  .mob-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.85rem 1rem 1rem}
+  .mob-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.85rem 1rem 1.5rem;overscroll-behavior:contain}
 
   /* KPI grid móvil */
   .mob-kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.85rem}
@@ -379,7 +379,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
   .mob-form-header{background:var(--green-dark);padding:.85rem 1rem;flex-shrink:0;display:flex;align-items:center;gap:.75rem}
   .mob-form-title{font-size:15px;font-weight:700;color:#fff}
   .mob-form-sub{font-size:11px;color:var(--green-pale)}
-  .mob-form-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem}
+  .mob-form-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem;padding-bottom:1.5rem}
   .mob-form-body .field{margin-bottom:1rem}
   .mob-form-body .field label{font-size:11px}
   .mob-form-body .field input,
@@ -813,8 +813,15 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
         <div>
           <div class="mob-header-title">🍋 AgroPlanner</div>
           <div class="mob-header-sub" id="mob-fecha-sub">—</div>
+          <div style="font-size:11px;color:rgba(200,235,213,.75);margin-top:1px" id="mob-total-pill">— personas</div>
         </div>
-        <div class="mob-header-pill" id="mob-total-pill">— personas</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+          <div style="font-size:11px;font-weight:600;color:rgba(200,235,213,.9)" id="mob-user-name">—</div>
+          <button onclick="mobSincronizar()" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font);-webkit-tap-highlight-color:transparent" id="mob-sync-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 15.57a10 10 0 1 1-.59-8.27"/></svg>
+            Sincronizar
+          </button>
+        </div>
       </div>
     </div>
     <div class="mob-body">
@@ -4316,9 +4323,15 @@ function goMobPage(page, activeBtn){
   if(page==='nuevo') initMobForm();
 }
 
+function mobSincronizar(){
+  const btn = document.getElementById('mob-sync-btn');
+  if(btn){ btn.style.opacity='.5'; btn.style.pointerEvents='none'; }
+  jalarTodoDeSheets().finally(()=>{
+    if(btn){ btn.style.opacity='1'; btn.style.pointerEvents='auto'; }
+  });
+}
+
 function initMobUI(){
-  if(!isMobile()) return;
-  // Inicializar fecha de dashboard con hoy
   const fd = document.getElementById('mob-fil-fecha');
   if(fd && !fd.value) fd.value = isoHoy();
   renderMobDashboard();
@@ -4344,7 +4357,9 @@ function renderMobDashboard(){
   const subEl = document.getElementById('mob-fecha-sub');
   if(subEl) subEl.textContent = sub;
   const pill = document.getElementById('mob-total-pill');
-  if(pill) pill.textContent = total + ' persona'+(total!==1?'s':'');
+  if(pill) pill.textContent = total + ' persona'+(total!==1?'s':'')+' en campo';
+  const uname = document.getElementById('mob-user-name');
+  if(uname) uname.textContent = S.usuario?.nombre || '';
 
   // KPIs
   const set = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
@@ -4423,7 +4438,9 @@ function initMobForm(){
   if(fd && !fd.value) fd.value = isoHoy();
   // Hora por defecto
   const fh = document.getElementById('mf-hora');
-  if(fh && !fh.value) fh.value = horaAhora();
+  if(fh) fh.value = '07:00';
+  const fhfin = document.getElementById('mf-hora-fin');
+  if(fhfin) fhfin.value = '17:36';
   // Cargar ss
   ssLoad('mf-area', DB.maestros.areas.map?DB.maestros.areas : []);
   ssLoad('mf-resp', (DB.maestros.responsables||[]).map(r=>typeof r==='string'?r:(r.nombreCorto||r.nombres||'')).filter(Boolean));
