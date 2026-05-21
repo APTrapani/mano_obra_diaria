@@ -306,6 +306,9 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 /* ══════════════════════════════════════════
    MOBILE LAYOUT (≤768px)
 ══════════════════════════════════════════ */
+/* Ocultar páginas móviles en desktop */
+@media(min-width:769px){.mob-page,.mob-nav{display:none!important}}
+
 @media(max-width:768px){
   /* Ocultar elementos desktop */
   .topbar{display:none}
@@ -318,7 +321,7 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
   #page-inicio.active,#page-nuevo.active,#page-reportes.active{display:none!important}
 
   /* Páginas móviles */
-  .mob-page{display:none;flex-direction:column;height:calc(100dvh - 56px);overflow:hidden;animation:fadeIn .2s ease;position:fixed;top:0;left:0;right:0;bottom:56px}
+  .mob-page{display:none;flex-direction:column;height:calc(100dvh - 56px);overflow:hidden;animation:fadeIn .2s ease;position:fixed;top:0;left:0;right:0;bottom:56px;z-index:200}
   .mob-page.active{display:flex}
 
   /* Bottom nav */
@@ -1243,7 +1246,7 @@ const save=()=>localStorage.setItem(DB_KEY,JSON.stringify(DB));
 let S={usuario:null,lotes:[],lotesMap:{},registros:[],editUserId:null,editCultivoIdx:null,confirmCb:null,seg:'hoy'};
 
 /* ═══════════ UTILS ═══════════ */
-const isoHoy=()=>new Date().toISOString().split('T')[0];
+const isoHoy=()=>{ const d=new Date(); const pad=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); };
 const horaAhora=()=>new Date().toTimeString().slice(0,5);
 const initials=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
 const fechaLarga=()=>new Date().toLocaleDateString('es-PE',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
@@ -3200,7 +3203,8 @@ function renderEvolucion(){
   const dias = [];
   for(let i=6;i>=0;i--){
     const d=new Date(); d.setDate(d.getDate()-i);
-    dias.push(d.toISOString().slice(0,10));
+    const pad=n=>String(n).padStart(2,'0');
+    dias.push(d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()));
   }
 
   const datos = dias.map(f=>{
