@@ -1325,7 +1325,7 @@ function doLogin(){
   const err=document.getElementById('login-err');
   if(!found){err.classList.add('show');return;}
   err.classList.remove('show');
-  found.lastAccess=new Date().toISOString();save();
+  found.lastAccess=new Date().toISOString();save();pushUsuariosASheets().catch(()=>{});
   S.usuario=found;
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='flex';
@@ -1890,7 +1890,8 @@ const MAESTROS_SHEETS = {
   responsables: 'Maestro_Responsables',
   cultivos:     'Maestro_Cultivos',
   actividades:  'Maestro_Actividades',
-  contratas:    'Maestro_Contratas'
+  contratas:    'Maestro_Contratas',
+  usuarios:     'Maestro_Usuarios'
 };
 
 // Cabeceras de cada maestro para exportar/importar
@@ -1899,7 +1900,8 @@ const MAESTROS_HEADERS = {
   responsables: ['DNI','Apellidos y Nombres','Nombre Corto','Área'],
   cultivos:     ['Etapa','Módulo','Lote','Cultivo','Patrón','Copa','Ha Totales','Ha Sembradas','Plantas Totales','Plantas Sembradas','Estado'],
   actividades:  ['Subárea','Grupo Actividad','Código','Actividad','Tipo','Unidad Medida'],
-  contratas:    ['Razón Social','RUC','Nombre Corto','Contacto','Teléfono','Especialidad','Estado']
+  contratas:    ['Razón Social','RUC','Nombre Corto','Contacto','Teléfono','Especialidad','Estado'],
+  usuarios:     ['ID','Nombre','Usuario','Password','Rol','Estado','Permisos','Último Acceso']
 };
 
 // Serializar cada maestro a array de filas
@@ -1910,6 +1912,7 @@ function maestroToRows(tipo){
   if(tipo==='cultivos')     return d.map(c=>[c.etapa||'',c.modulo||'',c.lote||'',c.cultivo||'',c.patron||'',c.copa||'',c.haTotales||'',c.haSembradas||'',c.plantasTotales||'',c.plantasSembradas||'',c.estado||'Activo']);
   if(tipo==='actividades')  return d.map(a=>typeof a==='string'?[a,'','','','Directa','']:[a.subarea||'',a.grupoActividad||'',a.codigo||'',a.actividad||'',a.tipo||'Directa',a.unidadMedida||'']);
   if(tipo==='contratas')    return d.map(c=>[c.razon||'',c.ruc||'',c.nombreCorto||'',c.contacto||'',c.telefono||'',c.especialidad||'',c.estado||'Activo']);
+  if(tipo==='usuarios')     return (DB.usuarios||[]).map(u=>[u.id||'',u.nombre||'',u.usuario||'',u.password||'',u.rol||'supervisor',u.estado||'Activo',JSON.stringify(u.perms||{}),u.lastAccess||'']);
   return [];
 }
 
@@ -1920,7 +1923,25 @@ function rowsToMaestro(tipo, rows){
   if(tipo==='cultivos')     return rows.map(r=>({etapa:String(r[0]||''),modulo:String(r[1]||''),lote:parseInt(r[2])||null,cultivo:String(r[3]||''),patron:String(r[4]||''),copa:String(r[5]||''),haTotales:r[6]!==''?parseFloat(r[6]).toFixed(2):'',haSembradas:r[7]!==''?parseFloat(r[7]).toFixed(2):'',plantasTotales:r[8]!==''?Math.round(parseFloat(r[8])):null,plantasSembradas:r[9]!==''?Math.round(parseFloat(r[9])):null,estado:String(r[10]||'Activo')})).filter(r=>r.cultivo);
   if(tipo==='actividades')  return rows.map(r=>({subarea:String(r[0]||''),grupoActividad:String(r[1]||''),codigo:String(r[2]||''),actividad:String(r[3]||''),tipo:String(r[4]||'Directa'),unidadMedida:String(r[5]||'')})).filter(r=>r.actividad);
   if(tipo==='contratas')    return rows.map(r=>({razon:String(r[0]||''),ruc:String(r[1]||''),nombreCorto:String(r[2]||''),contacto:String(r[3]||''),telefono:String(r[4]||''),especialidad:String(r[5]||''),estado:String(r[6]||'Activo')})).filter(r=>r.razon);
+  if(tipo==='usuarios')     return rows.map(r=>{ let perms={}; try{perms=JSON.parse(r[6]||'{}');}catch{perms={inicio:true,nuevo:true,reportes:true,exportar:false};} return {id:String(r[0]||'u'+Date.now()),nombre:String(r[1]||''),usuario:String(r[2]||''),password:String(r[3]||''),rol:String(r[4]||'supervisor'),estado:String(r[5]||'Activo'),perms,lastAccess:String(r[7]||'')}; }).filter(r=>r.usuario);
   return [];
+}
+
+// Sincronizar usuarios a Sheets
+async function pushUsuariosASheets(){
+  const headers = MAESTROS_HEADERS.usuarios;
+  const rows = maestroToRows('usuarios');
+  const body = JSON.stringify({accion:'reemplazar', sheet:'Maestro_Usuarios', datos:[headers, ...rows]});
+  const ctrl = new AbortController();
+  const tid = setTimeout(()=>ctrl.abort(), 15000);
+  try{
+    const res = await fetch(CFG.APPS_SCRIPT_URL, {method:'POST', headers:{'Content-Type':'text/plain'}, body, signal:ctrl.signal});
+    clearTimeout(tid);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json = await res.json();
+    if(json.status!=='ok') throw new Error(json.message||'Error');
+    sync('ok','sincronizado');
+  }catch(e){ clearTimeout(tid); sync('err','error'); throw e; }
 }
 
 // Enviar un maestro completo a Sheets (reemplaza toda la hoja)
@@ -1980,6 +2001,11 @@ async function jalarTodoDeSheets(){
     if(m.cultivos?.length > 1){     DB.maestros.cultivos     = rowsToMaestro('cultivos',     m.cultivos.slice(1));     actualizados++; }
     if(m.actividades?.length > 1){  DB.maestros.actividades  = rowsToMaestro('actividades',  m.actividades.slice(1));  actualizados++; }
     if(m.contratas?.length > 1){    DB.maestros.contratas    = rowsToMaestro('contratas',    m.contratas.slice(1));    actualizados++; }
+    if(m.usuarios?.length > 1){
+      const nuevosUsers = rowsToMaestro('usuarios', m.usuarios.slice(1));
+      if(nuevosUsers.length) DB.usuarios = nuevosUsers;
+      actualizados++;
+    }
 
     // Reemplazar registros si vienen
     if(m.registros?.length > 1){
@@ -4251,9 +4277,10 @@ function guardarUser(){
     toast('Usuario creado','ok');
   }
   save();cerrarModalUser();renderUsuarios();
+  pushUsuariosASheets().catch(()=>toast('Guardado local. Error al sincronizar Sheets.','err'));
 }
 
-function delUser(id){DB.usuarios=DB.usuarios.filter(u=>u.id!==id);save();renderUsuarios();toast('Usuario eliminado');}
+function delUser(id){DB.usuarios=DB.usuarios.filter(u=>u.id!==id);save();renderUsuarios();toast('Usuario eliminado');pushUsuariosASheets().catch(()=>toast('Eliminado local. Error al sincronizar Sheets.','err'));}
 
 /* ── CONFIRM ── */
 function abrirConfirm(txt,cb){
