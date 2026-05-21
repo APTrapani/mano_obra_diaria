@@ -314,14 +314,14 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
   .topbar{display:none}
   .sidebar{display:none}
   .app-body{flex-direction:column;height:100dvh;overflow:hidden}
-  .main{padding:0;height:calc(100dvh - 56px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .main{padding:0;height:calc(100dvh - 56px);overflow-y:auto;-webkit-overflow-scrolling:touch;visibility:hidden}
 
   /* Ocultar páginas desktop en móvil (excepto las móviles) */
   #page-inicio,#page-nuevo,#page-reportes,#page-config{display:none!important}
   #page-inicio.active,#page-nuevo.active,#page-reportes.active{display:none!important}
 
   /* Páginas móviles */
-  .mob-page{display:flex;flex-direction:column;height:calc(100dvh - 56px);overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:56px;z-index:200;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;pointer-events:none}
+  .mob-page{display:flex;flex-direction:column;height:calc(100dvh - 56px);overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:56px;z-index:200;background:var(--bg-base);opacity:0;visibility:hidden;transition:opacity .15s ease;pointer-events:none}
   .mob-page.active{opacity:1;visibility:visible;pointer-events:auto}
 
   /* Bottom nav */
@@ -4433,13 +4433,25 @@ let mobLotes = [];
 function isMobile(){ return window.innerWidth <= 768; }
 
 function goMobPage(page, activeBtn){
-  document.querySelectorAll('.mob-page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('mob-page-'+page).classList.add('active');
-  // Resetear todos los botones de nav
-  document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
-  if(activeBtn) activeBtn.classList.add('active');
-  if(page==='dashboard') renderMobDashboard();
-  if(page==='nuevo') initMobForm();
+  // Ocultar todas primero sin transición
+  document.querySelectorAll('.mob-page').forEach(p=>{
+    p.style.transition='none';
+    p.classList.remove('active');
+  });
+  // En el siguiente frame, activar la nueva con transición
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const target = document.getElementById('mob-page-'+page);
+      if(target){
+        target.style.transition='';
+        target.classList.add('active');
+      }
+      document.querySelectorAll('.mob-nav-btn').forEach(b=>b.classList.remove('active'));
+      if(activeBtn) activeBtn.classList.add('active');
+      if(page==='dashboard') renderMobDashboard();
+      if(page==='nuevo') initMobForm();
+    });
+  });
 }
 
 function mobSincronizar(){
