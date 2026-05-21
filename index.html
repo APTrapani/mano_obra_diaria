@@ -4400,31 +4400,6 @@ function iniciarApp(){
   }
 }
 
-/* script temporal para pruebas */
-
-/* === BYPASS LOGIN TEMPORAL === */
-window.onload = function() {
-  // 1. Buscamos al usuario administrador por defecto
-  const adminUser = DB.usuarios.find(u => u.rol === 'admin');
-  S.usuario = adminUser;
-  
-  // 2. Ocultamos el login y mostramos la app
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  
-  // 3. Llenamos los datos visuales de la barra superior
-  document.getElementById('topbar-date').textContent = fechaLarga();
-  document.getElementById('topbar-name').textContent = adminUser.nombre;
-  document.getElementById('topbar-role').textContent = adminUser.rol;
-  document.getElementById('topbar-av').textContent = initials(adminUser.nombre);
-  
-  // 4. Aplicamos los permisos totales e iniciamos la app
-  aplicarPermisos(adminUser);
-  iniciarApp();
-  initMobUI();
-};
-/* ============================= */
-
 
 /* ═══════════════════════════════════════════════════════
    MOBILE — Estado y navegación
