@@ -805,21 +805,21 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
        VISTAS MÓVILES (solo ≤768px)
   ══════════════════════════════════════ -->
   <div id="mob-page-dashboard" class="mob-page active">
-    <div class="mob-header">
-      <div class="mob-header-top">
-        <div>
-          <div class="mob-header-title">🍋 AgroPlanner</div>
-          <div class="mob-header-sub" id="mob-fecha-sub">—</div>
-          <div style="font-size:11px;color:rgba(200,235,213,.75);margin-top:1px" id="mob-total-pill">— personas</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-          <div style="font-size:11px;font-weight:600;color:rgba(200,235,213,.9)" id="mob-user-name">—</div>
-          <button onclick="mobSincronizar()" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font);-webkit-tap-highlight-color:transparent" id="mob-sync-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 15.57a10 10 0 1 1-.59-8.27"/></svg>
-            Sincronizar
-          </button>
-        </div>
+    <div class="mob-header" style="padding:.75rem 1rem">
+      <!-- Fila 1: AgroPlanner + Sincronizar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.2rem">
+        <div class="mob-header-title">🍋 AgroPlanner</div>
+        <button onclick="mobSincronizar()" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font);-webkit-tap-highlight-color:transparent" id="mob-sync-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 15.57a10 10 0 1 1-.59-8.27"/></svg>
+          Sincronizar
+        </button>
       </div>
+      <!-- Fila 2: Nombre usuario -->
+      <div style="font-size:11px;font-weight:600;color:rgba(200,235,213,.9);margin-bottom:.25rem" id="mob-user-name">—</div>
+      <!-- Fila 3: Fecha centrada -->
+      <div style="font-size:11px;color:var(--green-pale);font-weight:500" id="mob-fecha-sub">—</div>
+      <!-- pill oculto (se mantiene para compatibilidad con JS) -->
+      <div id="mob-total-pill" style="display:none">—</div>
     </div>
     <div class="mob-body">
       <div class="mob-date-bar">
@@ -1329,6 +1329,7 @@ function doLogin(){
   document.getElementById('topbar-av').textContent=initials(found.nombre);
   aplicarPermisos(found);
   iniciarApp();
+  initMobUI();
 }
 
 function aplicarPermisos(u){
@@ -4400,6 +4401,15 @@ function iniciarApp(){
   }
 }
 
+/* script temporal para pruebas */
+
+/* Login activo — sin bypass */
+window.onload = function() {
+  // Solo mostrar la pantalla de login
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+};
+
 
 /* ═══════════════════════════════════════════════════════
    MOBILE — Estado y navegación
@@ -4414,7 +4424,7 @@ function goMobPage(page, activeBtn){
   const target = document.getElementById('mob-page-'+page);
   if(target) target.classList.add('active');
   if(activeBtn) activeBtn.classList.add('active');
-  if(page==='dashboard') renderMobDashboard();
+  if(page==='dashboard'){ ssCloseAll(); renderMobDashboard(); }
   if(page==='nuevo') initMobForm();
 }
 
