@@ -412,6 +412,7 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
 /* Modal edición registro */
 #modal-edit-reg .field{margin-bottom:.85rem}
 
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -429,7 +430,7 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
     </div>
     <div id="login-err" class="alert alert-err" style="margin-bottom:1.5rem">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Usuario o contraseña incorrectos.
+      <span id="login-err-t">Usuario o contraseña incorrectos.</span>
     </div>
     <div class="field"><label>Usuario</label><input type="text" id="inp-user" placeholder="ingresar usuario" autocomplete="username"></div>
     <div class="field"><label>Contraseña</label><input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
@@ -1312,14 +1313,50 @@ function pFil(id,lista,label){
 }
 
 /* ═══════════ AUTH ═══════════ */
-function doLogin(){
-  const user=document.getElementById('inp-user').value.trim();
-  const pass=document.getElementById('inp-pass').value;
-  const found=DB.usuarios.find(u=>u.usuario===user&&u.password===pass);
-  const err=document.getElementById('login-err');
-  if(!found){err.classList.add('show');return;}
+async function doLogin(){
+  const user = document.getElementById('inp-user').value.trim();
+  const pass = document.getElementById('inp-pass').value;
+  const err  = document.getElementById('login-err');
+  const errT = document.getElementById('login-err-t');
+  const btn  = document.querySelector('#login-screen .btn-primary');
+  if(!user||!pass){ errT.textContent='Ingresa tu usuario y contraseña.'; err.classList.add('show'); return; }
   err.classList.remove('show');
-  found.lastAccess=new Date().toISOString();save();pushUsuariosASheets().catch(()=>{});
+  const origHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Verificando…';
+
+  let source = 'local';
+  try{
+    const ctrl = new AbortController();
+    const tid  = setTimeout(()=>ctrl.abort(), 10000);
+    const res  = await fetch(CFG.APPS_SCRIPT_URL+'?accion=leer&sheet=Maestro_Usuarios', {signal:ctrl.signal});
+    clearTimeout(tid);
+    if(res.ok){
+      const json = await res.json();
+      if(json.status==='ok' && json.datos?.length>1){
+        const sheetsUsers = json.datos.slice(1).map(r=>({
+          id:String(r[0]||''), nombre:String(r[1]||''), usuario:String(r[2]||''),
+          password:String(r[3]||''), rol:String(r[4]||'supervisor'), estado:String(r[5]||'Activo'),
+          perms:(()=>{try{return JSON.parse(r[6]||'{}');}catch{return {inicio:true,nuevo:true,reportes:true,exportar:false};}})(),
+          lastAccess:String(r[7]||'')
+        })).filter(u=>u.usuario);
+        if(sheetsUsers.length){ DB.usuarios=sheetsUsers; save(); }
+        source='sheets';
+      }
+    }
+  }catch(e){ source='local'; }
+
+  btn.disabled=false; btn.innerHTML=origHTML;
+
+  const found = DB.usuarios.find(u=>u.usuario===user&&u.password===pass&&(u.estado||'Activo')==='Activo');
+  if(!found){
+    errT.textContent = source==='local'
+      ? 'Sin conexión o credenciales incorrectas. Verifica tu red e intenta de nuevo.'
+      : 'Usuario o contraseña incorrectos.';
+    err.classList.add('show'); return;
+  }
+  err.classList.remove('show');
+  found.lastAccess=new Date().toISOString(); save(); pushUsuariosASheets().catch(()=>{});
   S.usuario=found;
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='flex';
