@@ -807,13 +807,19 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
   ══════════════════════════════════════ -->
   <div id="mob-page-dashboard" class="mob-page active">
     <div class="mob-header" style="padding:.75rem 1rem">
-      <!-- Fila 1: AgroPlanner + Sincronizar -->
+      <!-- Fila 1: AgroPlanner + acciones -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.2rem">
         <div class="mob-header-title">🍋 AgroPlanner</div>
-        <button onclick="mobSincronizar()" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font);-webkit-tap-highlight-color:transparent" id="mob-sync-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 15.57a10 10 0 1 1-.59-8.27"/></svg>
-          Sincronizar
-        </button>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button onclick="mobSincronizar()" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:4px 10px;font-size:10px;font-weight:600;color:#fff;cursor:pointer;font-family:var(--font);-webkit-tap-highlight-color:transparent" id="mob-sync-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M21.5 2v6h-6"/><path d="M2.5 22v-6h6"/><path d="M21.34 15.57a10 10 0 1 1-.59-8.27"/></svg>
+            Sincronizar
+          </button>
+          <button onclick="doLogout()" style="display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:4px 9px;font-size:10px;font-weight:600;color:rgba(200,235,213,.8);cursor:pointer;font-family:var(--font);-webkit-tap-highlight-color:transparent" title="Cerrar sesión">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Salir
+          </button>
+        </div>
       </div>
       <!-- Fila 2: Nombre usuario -->
       <div style="font-size:11px;font-weight:600;color:rgba(200,235,213,.9);margin-bottom:.25rem" id="mob-user-name">—</div>
@@ -857,11 +863,26 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
           <div class="mob-kpi-prog"><div class="mob-kpi-prog-fill" id="mk-foco-prog" style="width:0%;background:#60a5fa"></div></div>
         </div>
       </div>
+      <!-- Personal por área -->
+      <div class="mob-sec-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Personal por área
+      </div>
+      <div id="mob-area-list" class="mob-act-list" style="margin-bottom:.85rem"></div>
+
+      <!-- Personas por actividad -->
       <div class="mob-sec-title">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         Personas por actividad
       </div>
       <div class="mob-act-list" id="mob-act-list"></div>
+
+      <!-- Resumen por actividad -->
+      <div class="mob-sec-title" style="margin-top:.5rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Resumen por actividad
+      </div>
+      <div id="mob-resumen-act" class="mob-act-list" style="margin-bottom:.85rem"></div>
       <div class="mob-sec-title" style="margin-top:.5rem">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
         Personas por responsable
@@ -1358,6 +1379,7 @@ async function doLogin(){
   err.classList.remove('show');
   found.lastAccess=new Date().toISOString(); save(); pushUsuariosASheets().catch(()=>{});
   S.usuario=found;
+  sessionStorage.setItem('agro_session', JSON.stringify({id:found.id,usuario:found.usuario}));
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app').style.display='flex';
   document.getElementById('topbar-date').textContent=fechaLarga();
@@ -1383,6 +1405,7 @@ function aplicarPermisos(u){
 
 function doLogout(){
   S.usuario=null;
+  sessionStorage.removeItem('agro_session');
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('inp-user').value='';
@@ -4442,9 +4465,29 @@ function iniciarApp(){
 
 /* Login activo — sin bypass */
 window.onload = function() {
-  // Solo mostrar la pantalla de login
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
+  const saved = sessionStorage.getItem('agro_session');
+  if(saved){
+    try{
+      const sess = JSON.parse(saved);
+      const found = DB.usuarios.find(u=>u.id===sess.id&&u.usuario===sess.usuario&&(u.estado||'Activo')==='Activo');
+      if(found){
+        S.usuario = found;
+        document.getElementById('login-screen').style.display='none';
+        document.getElementById('app').style.display='flex';
+        document.getElementById('topbar-date').textContent=fechaLarga();
+        document.getElementById('topbar-name').textContent=found.nombre;
+        document.getElementById('topbar-role').textContent=found.rol;
+        document.getElementById('topbar-av').textContent=initials(found.nombre);
+        aplicarPermisos(found);
+        iniciarApp();
+        initMobUI();
+        return;
+      }
+    }catch(e){}
+  }
+  // Sin sesión activa → mostrar login
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
 };
 
 
@@ -4549,6 +4592,53 @@ function renderMobDashboard(){
           <div class="mob-act-bar-wrap"><div class="mob-act-bar-track"><div class="mob-act-bar-fill" style="width:${Math.round(cnt/maxA*100)}%"></div></div></div>
           <div class="mob-act-count">${cnt}</div>
         </div>`).join('');
+    }
+  }
+
+  // Personal por área
+  const byArea = {};
+  regs.forEach(r=>{ if(r.area) byArea[r.area]=(byArea[r.area]||0)+(parseInt(r.nPersonas)||0); });
+  const areaList = document.getElementById('mob-area-list');
+  if(areaList){
+    const sortedArea = Object.entries(byArea).sort((a,b)=>b[1]-a[1]);
+    const maxArea = sortedArea[0]?.[1]||1;
+    if(!sortedArea.length){
+      areaList.innerHTML='<div class="mob-empty">Sin datos de área</div>';
+    } else {
+      areaList.innerHTML=sortedArea.map(([area,cnt])=>`
+        <div class="mob-act-item">
+          <div class="mob-act-name" title="${area}">${area}</div>
+          <div class="mob-act-bar-wrap"><div class="mob-act-bar-track"><div class="mob-act-bar-fill" style="width:${Math.round(cnt/maxArea*100)}%"></div></div></div>
+          <div class="mob-act-count">${cnt}</div>
+        </div>`).join('');
+    }
+  }
+
+  // Resumen por actividad (tipo Propio / Contrata desglosado)
+  const resumenAct = {};
+  regs.forEach(r=>{
+    if(!r.actividad) return;
+    if(!resumenAct[r.actividad]) resumenAct[r.actividad]={propio:0,contrata:0};
+    if(r.tipo==='Propio') resumenAct[r.actividad].propio+=(parseInt(r.nPersonas)||0);
+    else resumenAct[r.actividad].contrata+=(parseInt(r.nPersonas)||0);
+  });
+  const resumenEl = document.getElementById('mob-resumen-act');
+  if(resumenEl){
+    const entries = Object.entries(resumenAct).sort((a,b)=>(b[1].propio+b[1].contrata)-(a[1].propio+a[1].contrata));
+    if(!entries.length){
+      resumenEl.innerHTML='<div class="mob-empty">Sin datos</div>';
+    } else {
+      resumenEl.innerHTML=entries.map(([act,v])=>{
+        const tot=v.propio+v.contrata;
+        return `<div class="mob-act-item" style="flex-wrap:wrap;gap:.3rem .7rem;padding:.55rem .85rem">
+          <div style="font-size:12px;font-weight:600;color:var(--text-main);flex:1;min-width:120px">${act}</div>
+          <div style="display:flex;gap:.5rem;align-items:center;flex-shrink:0">
+            ${v.propio?`<span style="font-size:10px;background:var(--primary-bg);color:var(--green-dark);border:1px solid var(--primary-b);border-radius:5px;padding:1px 7px;font-weight:600">P: ${v.propio}</span>`:''}
+            ${v.contrata?`<span style="font-size:10px;background:#fef3c7;color:#b45309;border:1px solid #fcd34d;border-radius:5px;padding:1px 7px;font-weight:600">C: ${v.contrata}</span>`:''}
+            <span style="font-size:12px;font-weight:700;color:var(--green-dark);font-family:var(--mono)">${tot}</span>
+          </div>
+        </div>`;
+      }).join('');
     }
   }
 
