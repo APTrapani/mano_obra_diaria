@@ -432,7 +432,7 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span id="login-err-t">Usuario o contraseña incorrectos.</span>
     </div>
-    <div class="field"><label>Usuario</label><input type="text" id="inp-user" placeholder="ingresar usuario" autocomplete="username"></div>
+    <div class="field"><label>Usuario</label><input type="text" id="inp-user" placeholder="ingresar usuario" autocomplete="username" style="font-size:16px"></div>
     <div class="field"><label>Contraseña</label><input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="doLogin()">Ingresar al Sistema</button>
   </div>
@@ -4504,7 +4504,22 @@ function goMobPage(page, activeBtn){
   const target = document.getElementById('mob-page-'+page);
   if(target) target.classList.add('active');
   if(activeBtn) activeBtn.classList.add('active');
-  if(page==='dashboard'){ ssCloseAll(); renderMobDashboard(); }
+  if(page==='dashboard'){
+    ssCloseAll();
+    ['mf-area','mf-resp','mf-act','mf-contratista'].forEach(id=>{
+      const vis=document.getElementById('ss-'+id);
+      const hid=document.getElementById(id);
+      if(vis)vis.value='';
+      if(hid)hid.value='';
+      const drop=document.getElementById('ss-drop-'+id);
+      if(drop)drop.style.display='none';
+    });
+    const mfTipo=document.getElementById('mf-tipo');
+    if(mfTipo)mfTipo.value='';
+    const lotesDd=document.getElementById('mob-lotes-dropdown');
+    if(lotesDd)lotesDd.style.display='none';
+    renderMobDashboard();
+  }
   if(page==='nuevo') initMobForm();
 }
 
