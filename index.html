@@ -35,18 +35,15 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 /* LOGIN */
 /* ── LOGIN ── */
 #login-screen{
-  position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:stretch;justify-content:center;
   background:var(--green-dark);
-  overflow:hidden;
 }
 .lcard{
   display:flex;flex-direction:column;justify-content:center;
   width:100%;max-width:400px;
-  padding:2rem 1.75rem;
+  padding:2.5rem 2rem;
   background:var(--green-dark);
-  max-height:100%;
-  overflow-y:auto;
 }
 @media(min-width:600px){
   #login-screen{align-items:center;padding:1.5rem;background:var(--green-dark)}
@@ -190,79 +187,18 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 .sidebar.collapsed .sidebar-pin-btn{justify-content:center}
 
 /* ── SEARCHABLE SELECT ── */
-/* ── SEARCHABLE SELECT ── */
 .ss-wrap{position:relative;width:100%}
-.ss-input{
-  width:100%;padding:8px 32px 8px 10px;
-  background:var(--bg-input);border:1px solid var(--border-hover);
-  border-radius:var(--r);font-size:12px;font-family:var(--font);
-  color:var(--text-main);outline:none;cursor:pointer;
-  box-sizing:border-box;transition:border-color .2s;
-  -webkit-appearance:none;
-}
-.ss-input:focus,.ss-wrap.open .ss-input{
-  border-color:var(--green-bright);
-  box-shadow:0 0 0 3px rgba(74,153,96,.12);
-}
-.ss-arrow{
-  position:absolute;right:10px;top:50%;
-  transform:translateY(-50%);pointer-events:none;
-  color:var(--text-label);transition:transform .2s;
-}
-.ss-wrap.open .ss-arrow{transform:translateY(-50%) rotate(180deg)}
-/* Dropdown — desktop */
-.ss-drop{
-  display:none;position:absolute;
-  top:calc(100% + 4px);left:0;right:0;
-  background:var(--bg-panel);border:1px solid var(--border-hover);
-  border-radius:var(--r);z-index:1200;
-  box-shadow:0 8px 32px rgba(26,51,32,.2);
-  overflow:hidden;
-}
-.ss-drop.open{display:flex;flex-direction:column}
-/* Buscador integrado en el trigger en móvil */
-.ss-search{
-  width:100%;padding:10px 12px;
-  background:var(--bg-input);border:none;
-  border-bottom:1px solid var(--border-base);
-  font-size:14px;font-family:var(--font);
-  color:var(--text-main);outline:none;
-  box-sizing:border-box;flex-shrink:0;
-}
-.ss-list{max-height:200px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.ss-opt{
-  padding:10px 12px;font-size:13px;font-family:var(--font);
-  color:var(--text-sec);cursor:pointer;transition:background .12s;
-  -webkit-tap-highlight-color:transparent;
-}
-.ss-opt:hover,.ss-opt:active{background:var(--primary-bg);color:var(--green-dark)}
+.ss-input{width:100%;padding:8px 32px 8px 10px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:12px;font-family:var(--font);color:var(--text-main);outline:none;cursor:pointer;box-sizing:border-box;transition:border-color .2s}
+.ss-input:focus{border-color:var(--green-bright);box-shadow:0 0 0 3px rgba(74,153,96,.15)}
+.ss-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-label);transition:transform .2s}
+.ss-arrow.open{transform:translateY(-50%) rotate(180deg)}
+.ss-drop{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-panel);border:1px solid var(--border-hover);border-radius:var(--r);z-index:300;box-shadow:0 8px 24px rgba(26,51,32,.15);overflow:hidden}
+.ss-drop.open{display:block}
+.ss-search{width:100%;padding:8px 10px;background:var(--bg-input);border:none;border-bottom:1px solid var(--border-base);font-size:12px;font-family:var(--font);color:var(--text-main);outline:none;box-sizing:border-box}
+.ss-list{max-height:180px;overflow-y:auto}
+.ss-opt{padding:8px 12px;font-size:13px;font-family:var(--font);color:var(--text-sec);cursor:pointer;transition:background .15s}
+.ss-opt:hover,.ss-opt.focused{background:var(--primary-bg);color:var(--green-dark)}
 .ss-opt.selected{background:var(--primary-bg);color:var(--green-dark);font-weight:600}
-.ss-empty{padding:12px;font-size:12px;color:var(--text-muted);text-align:center}
-/* Móvil: dropdown como sheet desde abajo */
-@media(max-width:768px){
-  .ss-drop{
-    position:fixed!important;
-    left:0!important;right:0!important;
-    bottom:0!important;top:auto!important;
-    width:100%!important;
-    border-radius:16px 16px 0 0!important;
-    border:none!important;
-    box-shadow:0 -8px 40px rgba(0,0,0,.3)!important;
-    max-height:60vh!important;
-    z-index:2000!important;
-  }
-  .ss-drop.open{display:flex;flex-direction:column}
-  .ss-search{font-size:16px!important;padding:14px 16px!important}
-  .ss-list{max-height:calc(60vh - 60px)!important}
-  .ss-opt{padding:14px 16px!important;font-size:15px!important}
-  /* Overlay oscuro detrás del sheet */
-  .ss-overlay{
-    display:none;position:fixed;inset:0;
-    background:rgba(0,0,0,.4);z-index:1999;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .ss-overlay.open{display:block}
-}
 .ss-empty{padding:10px 12px;font-size:12px;color:var(--text-label);text-align:center}
 
 /* KPIs DASHBOARD */
@@ -547,7 +483,6 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
 </head>
 <body>
 <div id="toast"></div>
-<div class="ss-overlay" id="ss-overlay" onclick="ssCloseAll()"></div>
 
 <!-- ═══ LOGIN ═══ -->
 <div id="login-screen">
@@ -694,7 +629,7 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
               <div class="field" style="margin-bottom:0">
                 <label>Actividad</label>
                 <div class="ss-wrap" id="ss-wrap-fil-dash-act">
-                  <input class="ss-input" id="ss-fil-dash-act" placeholder="Todas las actividades…" readonly onclick=\"ssToggle('fil-dash-act')\" ontouchend=\"event.preventDefault();ssToggle('fil-dash-act')\" autocomplete="off">
+                  <input class="ss-input" id="ss-fil-dash-act" placeholder="Todas las actividades…" readonly onclick="ssToggle('fil-dash-act')" autocomplete="off">
                   <svg class="ss-arrow" id="ss-arr-fil-dash-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg>
                   <div class="ss-drop" id="ss-drop-fil-dash-act">
                     <input class="ss-search" placeholder="Buscar actividad…" oninput="ssFilter('fil-dash-act',this.value)" id="ss-search-fil-dash-act">
@@ -821,16 +756,16 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
           <div class="fsep">Datos generales</div>
           <div class="row3">
             <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
-            <div class="field"><label>Área</label><div class="ss-wrap" id="ss-wrap-f-area"><input class="ss-input" id="ss-f-area" placeholder="Seleccionar área…" readonly onclick=\"ssToggle('f-area')\" ontouchend=\"event.preventDefault();ssToggle('f-area')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-area',this.value)" id="ss-search-f-area"><div class="ss-list" id="ss-list-f-area"></div></div></div><input type="hidden" id="f-area"></div>
-            <div class="field"><label>Responsable</label><div class="ss-wrap" id="ss-wrap-f-resp"><input class="ss-input" id="ss-f-resp" placeholder="Seleccionar responsable…" readonly onclick=\"ssToggle('f-resp')\" ontouchend=\"event.preventDefault();ssToggle('f-resp')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-resp',this.value)" id="ss-search-f-resp"><div class="ss-list" id="ss-list-f-resp"></div></div></div><input type="hidden" id="f-resp"></div>
+            <div class="field"><label>Área</label><div class="ss-wrap" id="ss-wrap-f-area"><input class="ss-input" id="ss-f-area" placeholder="Seleccionar área…" readonly onclick="ssToggle('f-area')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-area',this.value)" id="ss-search-f-area"><div class="ss-list" id="ss-list-f-area"></div></div></div><input type="hidden" id="f-area"></div>
+            <div class="field"><label>Responsable</label><div class="ss-wrap" id="ss-wrap-f-resp"><input class="ss-input" id="ss-f-resp" placeholder="Seleccionar responsable…" readonly onclick="ssToggle('f-resp')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-resp',this.value)" id="ss-search-f-resp"><div class="ss-list" id="ss-list-f-resp"></div></div></div><input type="hidden" id="f-resp"></div>
           </div>
           <div class="fsep">Trabajo del día</div>
           <div class="row3">
             <div class="field"><label>Tipo de personal</label>
               <select id="f-tipo" onchange="toggleContratista()"><option value="">Seleccionar…</option><option value="Propio">Propio</option><option value="Contrata">Contrata</option></select>
             </div>
-            <div class="field" id="field-contratista" style="display:none"><label>Contratista</label><div class="ss-wrap" id="ss-wrap-f-contratista"><input class="ss-input" id="ss-f-contratista" placeholder="Seleccionar contratista…" readonly onclick=\"ssToggle('f-contratista')\" ontouchend=\"event.preventDefault();ssToggle('f-contratista')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-contratista',this.value)" id="ss-search-f-contratista"><div class="ss-list" id="ss-list-f-contratista"></div></div></div><input type="hidden" id="f-contratista"></div>
-            <div class="field"><label>Actividad</label><div class="ss-wrap" id="ss-wrap-f-act"><input class="ss-input" id="ss-f-act" placeholder="Seleccionar actividad…" readonly onclick=\"ssToggle('f-act')\" ontouchend=\"event.preventDefault();ssToggle('f-act')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-act',this.value)" id="ss-search-f-act"><div class="ss-list" id="ss-list-f-act"></div></div></div><input type="hidden" id="f-act"></div>
+            <div class="field" id="field-contratista" style="display:none"><label>Contratista</label><div class="ss-wrap" id="ss-wrap-f-contratista"><input class="ss-input" id="ss-f-contratista" placeholder="Seleccionar contratista…" readonly onclick="ssToggle('f-contratista')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-contratista',this.value)" id="ss-search-f-contratista"><div class="ss-list" id="ss-list-f-contratista"></div></div></div><input type="hidden" id="f-contratista"></div>
+            <div class="field"><label>Actividad</label><div class="ss-wrap" id="ss-wrap-f-act"><input class="ss-input" id="ss-f-act" placeholder="Seleccionar actividad…" readonly onclick="ssToggle('f-act')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-f-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-f-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-act',this.value)" id="ss-search-f-act"><div class="ss-list" id="ss-list-f-act"></div></div></div><input type="hidden" id="f-act"></div>
             <div class="field"><label>Tarea / Meta</label><input type="number" id="f-tarea" min="0" step="any" placeholder="0"></div>
             <div class="field"><label>N° personas</label><input type="number" id="f-np" min="1" max="999" placeholder="0"></div>
           </div>
@@ -1041,11 +976,11 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
       <div style="font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-base)">Datos generales</div>
       <div class="field"><label>Fecha</label><input type="date" id="mf-fecha"></div>
       <div class="field"><label>Área</label>
-        <div class="ss-wrap" id="ss-wrap-mf-area"><input class="ss-input" id="ss-mf-area" placeholder="Seleccionar área…" readonly onclick=\"ssToggle('mf-area')\" ontouchend=\"event.preventDefault();ssToggle('mf-area')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-area',this.value)" id="ss-search-mf-area"><div class="ss-list" id="ss-list-mf-area"></div></div></div>
+        <div class="ss-wrap" id="ss-wrap-mf-area"><input class="ss-input" id="ss-mf-area" placeholder="Seleccionar área…" readonly onclick="ssToggle('mf-area')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-area',this.value)" id="ss-search-mf-area"><div class="ss-list" id="ss-list-mf-area"></div></div></div>
         <input type="hidden" id="mf-area">
       </div>
       <div class="field"><label>Responsable</label>
-        <div class="ss-wrap" id="ss-wrap-mf-resp"><input class="ss-input" id="ss-mf-resp" placeholder="Seleccionar responsable…" readonly onclick=\"ssToggle('mf-resp')\" ontouchend=\"event.preventDefault();ssToggle('mf-resp')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-resp',this.value)" id="ss-search-mf-resp"><div class="ss-list" id="ss-list-mf-resp"></div></div></div>
+        <div class="ss-wrap" id="ss-wrap-mf-resp"><input class="ss-input" id="ss-mf-resp" placeholder="Seleccionar responsable…" readonly onclick="ssToggle('mf-resp')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-resp',this.value)" id="ss-search-mf-resp"><div class="ss-list" id="ss-list-mf-resp"></div></div></div>
         <input type="hidden" id="mf-resp">
       </div>
       <div style="font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.06em;margin:.5rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-base)">Trabajo del día</div>
@@ -1055,11 +990,11 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
         </select>
       </div>
       <div class="field" id="mfield-contratista" style="display:none"><label>Contratista</label>
-        <div class="ss-wrap" id="ss-wrap-mf-contratista"><input class="ss-input" id="ss-mf-contratista" placeholder="Seleccionar contratista…" readonly onclick=\"ssToggle('mf-contratista')\" ontouchend=\"event.preventDefault();ssToggle('mf-contratista')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-contratista',this.value)" id="ss-search-mf-contratista"><div class="ss-list" id="ss-list-mf-contratista"></div></div></div>
+        <div class="ss-wrap" id="ss-wrap-mf-contratista"><input class="ss-input" id="ss-mf-contratista" placeholder="Seleccionar contratista…" readonly onclick="ssToggle('mf-contratista')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-contratista',this.value)" id="ss-search-mf-contratista"><div class="ss-list" id="ss-list-mf-contratista"></div></div></div>
         <input type="hidden" id="mf-contratista">
       </div>
       <div class="field"><label>Actividad</label>
-        <div class="ss-wrap" id="ss-wrap-mf-act"><input class="ss-input" id="ss-mf-act" placeholder="Seleccionar actividad…" readonly onclick=\"ssToggle('mf-act')\" ontouchend=\"event.preventDefault();ssToggle('mf-act')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-act',this.value)" id="ss-search-mf-act"><div class="ss-list" id="ss-list-mf-act"></div></div></div>
+        <div class="ss-wrap" id="ss-wrap-mf-act"><input class="ss-input" id="ss-mf-act" placeholder="Seleccionar actividad…" readonly onclick="ssToggle('mf-act')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-mf-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-mf-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-act',this.value)" id="ss-search-mf-act"><div class="ss-list" id="ss-list-mf-act"></div></div></div>
         <input type="hidden" id="mf-act">
       </div>
       <div class="field"><label>Tarea / Meta</label><input type="number" id="mf-tarea" min="0" step="any" placeholder="0" inputmode="decimal" style="font-size:16px"></div>
@@ -1069,16 +1004,11 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
         <div class="field"><label>Hora término</label><input type="time" id="mf-hora-fin" style="font-size:16px"></div>
       </div>
       <div class="field"><label>Lotes / Ubicación</label>
-        <button type="button" id="mob-lotes-btn" onclick="toggleMobLotesDD()" ontouchend="event.preventDefault();toggleMobLotesDD()" style="width:100%;padding:12px 14px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:16px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent">
-          <span id="mob-lotes-btn-label">--Todos--</span>
+        <button type="button" id="mob-lotes-btn" onclick="toggleMobLotesDD()" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:16px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left">
+          <span id="mob-lotes-btn-label">Seleccionar lotes…</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div id="mob-lotes-dropdown" style="display:none;position:fixed;left:0;right:0;bottom:0;background:var(--bg-panel);border-radius:16px 16px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.3);z-index:2000;max-height:65vh;display:none;flex-direction:column;overflow:hidden">
-          <div style="padding:12px 16px;border-bottom:1px solid var(--border-base);flex-shrink:0">
-            <input type="text" id="mob-lotes-search" placeholder="Buscar lote o cultivo…" oninput="renderMobLotesDD()" style="width:100%;padding:11px 14px;background:var(--bg-input);border:1.5px solid var(--border-hover);border-radius:10px;font-size:16px;font-family:var(--font);color:var(--text-main);outline:none;box-sizing:border-box">
-          </div>
-          <div id="mob-lotes-dd-body" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1"></div>
-        </div>
+        <div id="mob-lotes-dropdown" style="display:none;border:1px solid var(--border-hover);border-top:none;border-radius:0 0 var(--r) var(--r);max-height:260px;overflow-y:auto;background:var(--bg-panel)"></div>
         <div id="mob-lotes-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
       </div>
       <div class="field"><label>Observaciones (Opcional)</label><textarea id="mf-obs" placeholder="Condiciones, metas, incidencias…" style="font-size:16px;min-height:80px"></textarea></div>
@@ -1118,11 +1048,11 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
       </div>
       <div class="row3">
         <div class="field"><label>Área</label>
-          <div class="ss-wrap" id="ss-wrap-er-area"><input class="ss-input" id="ss-er-area" placeholder="Área…" readonly onclick=\"ssToggle('er-area')\" ontouchend=\"event.preventDefault();ssToggle('er-area')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-area',this.value)" id="ss-search-er-area"><div class="ss-list" id="ss-list-er-area"></div></div></div>
+          <div class="ss-wrap" id="ss-wrap-er-area"><input class="ss-input" id="ss-er-area" placeholder="Área…" readonly onclick="ssToggle('er-area')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-area',this.value)" id="ss-search-er-area"><div class="ss-list" id="ss-list-er-area"></div></div></div>
           <input type="hidden" id="er-area">
         </div>
         <div class="field"><label>Responsable</label>
-          <div class="ss-wrap" id="ss-wrap-er-resp"><input class="ss-input" id="ss-er-resp" placeholder="Responsable…" readonly onclick=\"ssToggle('er-resp')\" ontouchend=\"event.preventDefault();ssToggle('er-resp')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-resp',this.value)" id="ss-search-er-resp"><div class="ss-list" id="ss-list-er-resp"></div></div></div>
+          <div class="ss-wrap" id="ss-wrap-er-resp"><input class="ss-input" id="ss-er-resp" placeholder="Responsable…" readonly onclick="ssToggle('er-resp')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-resp',this.value)" id="ss-search-er-resp"><div class="ss-list" id="ss-list-er-resp"></div></div></div>
           <input type="hidden" id="er-resp">
         </div>
         <div class="field"><label>Tipo</label>
@@ -1133,11 +1063,11 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
       </div>
       <div class="row3">
         <div class="field"><label>Actividad</label>
-          <div class="ss-wrap" id="ss-wrap-er-act"><input class="ss-input" id="ss-er-act" placeholder="Actividad…" readonly onclick=\"ssToggle('er-act')\" ontouchend=\"event.preventDefault();ssToggle('er-act')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-act',this.value)" id="ss-search-er-act"><div class="ss-list" id="ss-list-er-act"></div></div></div>
+          <div class="ss-wrap" id="ss-wrap-er-act"><input class="ss-input" id="ss-er-act" placeholder="Actividad…" readonly onclick="ssToggle('er-act')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-act',this.value)" id="ss-search-er-act"><div class="ss-list" id="ss-list-er-act"></div></div></div>
           <input type="hidden" id="er-act">
         </div>
         <div class="field" id="er-field-contratista" style="display:none"><label>Contratista</label>
-          <div class="ss-wrap" id="ss-wrap-er-contratista"><input class="ss-input" id="ss-er-contratista" placeholder="Contratista…" readonly onclick=\"ssToggle('er-contratista')\" ontouchend=\"event.preventDefault();ssToggle('er-contratista')\" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-contratista',this.value)" id="ss-search-er-contratista"><div class="ss-list" id="ss-list-er-contratista"></div></div></div>
+          <div class="ss-wrap" id="ss-wrap-er-contratista"><input class="ss-input" id="ss-er-contratista" placeholder="Contratista…" readonly onclick="ssToggle('er-contratista')" autocomplete="off"><svg class="ss-arrow" id="ss-arr-er-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg><div class="ss-drop" id="ss-drop-er-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('er-contratista',this.value)" id="ss-search-er-contratista"><div class="ss-list" id="ss-list-er-contratista"></div></div></div>
           <input type="hidden" id="er-contratista">
         </div>
         <div class="field"><label>N° personas</label><input type="number" id="er-np" min="1" max="999" placeholder="0"></div>
@@ -3763,30 +3693,21 @@ function ssReset(id){
 }
 
 function ssToggle(id){
-  const wrap = document.getElementById('ss-wrap-'+id);
   const drop = document.getElementById('ss-drop-'+id);
+  const arr  = document.getElementById('ss-arr-'+id);
   const wasOpen = drop?.classList.contains('open');
   ssCloseAll();
-  if(!wasOpen && drop){
-    drop.classList.add('open');
-    wrap?.classList.add('open');
-    const overlay = document.getElementById('ss-overlay');
-    if(overlay) overlay.classList.add('open');
+  if(!wasOpen){
+    drop?.classList.add('open');
+    arr?.classList.add('open');
     const search = document.getElementById('ss-search-'+id);
-    if(search){
-      search.value='';
-      ssRenderList(id,'');
-      // En móvil no hacer focus (evita scroll del viewport)
-      if(window.innerWidth > 768) setTimeout(()=>search.focus(),50);
-    }
+    if(search){ search.value=''; ssRenderList(id,''); setTimeout(()=>search.focus(),50); }
   }
 }
 
 function ssCloseAll(){
   document.querySelectorAll('.ss-drop.open').forEach(d=>d.classList.remove('open'));
-  document.querySelectorAll('.ss-wrap.open').forEach(w=>w.classList.remove('open'));
-  const overlay = document.getElementById('ss-overlay');
-  if(overlay) overlay.classList.remove('open');
+  document.querySelectorAll('.ss-arrow.open').forEach(a=>a.classList.remove('open'));
 }
 
 function ssFilter(id, q){
@@ -4856,32 +4777,20 @@ function toggleMobContratista(){
 
 function toggleMobLotesDD(){
   const dd = document.getElementById('mob-lotes-dropdown');
-  const overlay = document.getElementById('ss-overlay');
   if(!dd) return;
-  const open = dd.style.display === 'flex';
-  if(open){
-    dd.style.display='none';
-    if(overlay) overlay.classList.remove('open');
-  } else {
-    ssCloseAll();
-    dd.style.display='flex';
-    if(overlay) overlay.classList.add('open');
-    // Sobreescribir onclick del overlay para cerrar lotes también
-    overlay.onclick = ()=>{ dd.style.display='none'; overlay.classList.remove('open'); overlay.onclick=()=>ssCloseAll(); };
-    const s=document.getElementById('mob-lotes-search');
-    if(s){s.value=''; s.focus();}
-    renderMobLotesDD();
-  }
+  const open = dd.style.display !== 'none';
+  dd.style.display = open ? 'none' : 'block';
+  if(!open) renderMobLotesDD();
 }
 
 function renderMobLotesDD(){
-  const body = document.getElementById('mob-lotes-dd-body') || document.getElementById('mob-lotes-dropdown');
-  if(!body) return;
-  const q = (document.getElementById('mob-lotes-search')?.value||'').toLowerCase().trim();
+  const dd = document.getElementById('mob-lotes-dropdown');
+  if(!dd) return;
+  // Reusar los mismos lotes del sistema
   const grupos = getGruposModulo();
-  const todos = grupos.flatMap(g=>g.lotes).filter(l=>!q||String(l.n).includes(q)||(l.cult||'').toLowerCase().includes(q)||(l.modulo||'').toLowerCase().includes(q));
-  if(!todos.length){ body.innerHTML='<div style="padding:16px;text-align:center;font-size:14px;color:var(--text-muted)">Sin lotes encontrados</div>'; return; }
-  body.innerHTML = todos.map(l=>{
+  const todos = grupos.flatMap(g=>g.lotes);
+  if(!todos.length){ dd.innerHTML='<div style="padding:14px;text-align:center;font-size:12px;color:var(--text-muted)">Sin lotes configurados</div>'; return; }
+  dd.innerHTML = todos.map(l=>{
     const sel = mobLotes.includes(l.n);
     return `<div onclick="toggleMobLote(${l.n})" style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;border-bottom:.5px solid var(--border-base);background:${sel?'var(--primary-bg)':'transparent'}">
       <span style="width:16px;height:16px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:2px solid ${sel?'var(--green-bright)':'var(--border-hover)'};background:${sel?'var(--green-bright)':'transparent'}">${sel?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</span>
