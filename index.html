@@ -33,12 +33,78 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 #toast.err{border-color:var(--red-b);background:var(--red-bg);color:var(--red)}
 
 /* LOGIN */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:var(--green-dark)}
-.lcard{background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);padding:2rem;width:100%;max-width:360px;box-shadow:var(--shadow-md)}
-.lbrand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-bottom:2rem}
-.lbrand-mark{width:64px;height:64px;background:var(--green-bright);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:8px}
-.lbrand-name{font-size:20px;font-weight:700;color:var(--text-main);letter-spacing:.02em}
-.lbrand-sub{font-size:11px;color:var(--text-label);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+/* ── LOGIN ── */
+#login-screen{
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:stretch;justify-content:center;
+  background:var(--green-dark);
+}
+.lcard{
+  display:flex;flex-direction:column;justify-content:center;
+  width:100%;max-width:400px;
+  padding:2.5rem 2rem;
+  background:var(--green-dark);
+}
+@media(min-width:600px){
+  #login-screen{align-items:center;padding:1.5rem;background:var(--green-dark)}
+  .lcard{
+    background:var(--bg-panel);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:20px;
+    padding:2.5rem;
+    box-shadow:0 24px 64px rgba(0,0,0,.4);
+    max-width:380px;
+  }
+  .lcard .field label{color:var(--text-label)}
+  .lcard .field input{background:var(--bg-input);border-color:var(--border-hover);color:var(--text-main)}
+  .lbrand-name{color:var(--text-main)!important}
+  .lbrand-sub{color:var(--text-label)!important}
+  #login-err{background:var(--alert-err-bg,#fef2f2);border-color:var(--alert-err-b,#fecaca)}
+}
+.lbrand{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin-bottom:2.5rem}
+.lbrand-mark{width:72px;height:72px;background:rgba(255,255,255,.12);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:8px;backdrop-filter:blur(8px)}
+.lbrand-name{font-size:22px;font-weight:700;color:#fff;letter-spacing:.01em}
+.lbrand-sub{font-size:11px;color:rgba(200,235,213,.7);font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+/* Inputs del login — mobile-first con font 16px para evitar zoom */
+.lcard .field label{color:rgba(200,235,213,.75);font-size:11px;letter-spacing:.06em}
+.lcard .field input{
+  font-size:16px!important;
+  padding:14px 16px;
+  background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(255,255,255,.15);
+  border-radius:12px;
+  color:#fff;
+  font-family:var(--font);
+  width:100%;
+  outline:none;
+  transition:border-color .2s,background .2s;
+  -webkit-appearance:none;
+}
+.lcard .field input::placeholder{color:rgba(200,235,213,.35)}
+.lcard .field input:focus{
+  border-color:rgba(255,255,255,.4);
+  background:rgba(255,255,255,.12);
+}
+.lcard .btn-primary{
+  padding:16px;
+  font-size:15px;
+  font-weight:700;
+  border-radius:12px;
+  letter-spacing:.02em;
+  background:rgba(255,255,255,.15);
+  border:1.5px solid rgba(255,255,255,.25);
+  color:#fff;
+  backdrop-filter:blur(8px);
+  transition:background .2s,border-color .2s;
+  margin-top:.5rem;
+}
+.lcard .btn-primary:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4)}
+.lcard .btn-primary:active{background:rgba(255,255,255,.28)}
+#login-err.show{
+  background:rgba(239,68,68,.15);
+  border:1px solid rgba(239,68,68,.3);
+  color:#fca5a5;
+}
 
 /* FORMS */
 .field{margin-bottom:1rem}
@@ -321,8 +387,8 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
   #page-inicio.active,#page-nuevo.active,#page-reportes.active{display:none!important}
 
   /* Páginas móviles */
-  .mob-page{display:flex;flex-direction:column;height:calc(100dvh - 56px);overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:56px;z-index:200;background:var(--bg-base);visibility:hidden;pointer-events:none}
-  .mob-page.active{visibility:visible;pointer-events:auto}
+  .mob-page{display:none;flex-direction:column;height:calc(100dvh - 56px);overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:56px;z-index:200;background:var(--bg-base)}
+  .mob-page.active{display:flex}
 
   /* Bottom nav */
   .mob-nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:var(--green-dark);display:flex;z-index:500;border-top:1px solid rgba(255,255,255,.1)}
