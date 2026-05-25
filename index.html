@@ -170,6 +170,82 @@ body{font-family:var(--font);background:var(--bg-base);color:var(--text-main);fo
 .ss-opt.selected{background:var(--primary-bg);color:var(--green-dark);font-weight:600}
 .ss-empty{padding:10px 12px;font-size:12px;color:var(--text-label);text-align:center}
 
+
+
+/* ── LOTES MULTI-SELECT — mismo estilo que ss-wrap ── */
+.ssm-wrap{position:relative;width:100%}
+.ssm-input{
+  width:100%;padding:8px 32px 8px 10px;
+  background:var(--bg-input);border:1px solid var(--border-hover);
+  border-radius:var(--r);font-size:12px;font-family:var(--font);
+  color:var(--text-main);outline:none;cursor:text;
+  box-sizing:border-box;transition:border-color .2s,box-shadow .2s;
+}
+.ssm-input:focus,.ssm-wrap.ssm-open .ssm-input{
+  border-color:var(--green-bright);box-shadow:0 0 0 3px rgba(74,153,96,.12);
+}
+.ssm-input::placeholder{color:var(--text-muted)}
+.ssm-arrow{position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-label);transition:transform .2s}
+.ssm-wrap.ssm-open .ssm-arrow{transform:translateY(-50%) rotate(180deg)}
+.ssm-drop{
+  display:none;position:absolute;
+  top:calc(100% + 4px);left:0;right:0;
+  background:var(--bg-panel);border:1px solid var(--border-hover);
+  border-radius:var(--r);z-index:300;
+  box-shadow:0 8px 24px rgba(26,51,32,.18);
+  overflow:hidden;
+  flex-direction:column;
+  max-height:320px;
+}
+.ssm-wrap.ssm-open .ssm-drop{display:flex}
+.ssm-search-row{display:none}
+.ssm-search{
+  width:100%;padding:7px 10px;font-size:12px;font-family:var(--font);
+  background:var(--bg-input);border:1px solid var(--border-hover);
+  border-radius:var(--r);color:var(--text-main);outline:none;
+  box-sizing:border-box;
+}
+.ssm-all-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;border-bottom:1px solid var(--border-base);
+  cursor:pointer;background:var(--bg-base);
+}
+.ssm-all-row:hover{background:var(--primary-bg)}
+.ssm-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.ssm-opt{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;cursor:pointer;transition:background .12s;
+  border-bottom:.5px solid var(--border-base);
+}
+.ssm-opt:last-child{border-bottom:none}
+.ssm-opt:hover{background:var(--primary-bg)}
+.ssm-opt.selected{background:rgba(74,153,96,.06)}
+.ssm-chk{
+  width:15px;height:15px;border-radius:4px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--border-hover);background:transparent;transition:all .15s;
+}
+.ssm-opt.selected .ssm-chk{background:var(--green-bright);border-color:var(--green-bright)}
+.ssm-opt-info{flex:1;min-width:0}
+.ssm-opt-main{font-size:12px;font-weight:600;color:var(--text-main)}
+.ssm-opt-sub{font-size:11px;color:var(--text-muted)}
+.ssm-opt-ha{font-size:11px;color:var(--text-muted);flex-shrink:0}
+
+/* ── BOTONES TIPO / TURNO ── */
+.btn-toggle-group{display:flex;gap:6px;flex-wrap:wrap}
+.btn-toggle{
+  flex:1;min-width:80px;padding:8px 12px;
+  background:var(--bg-input);border:1.5px solid var(--border-hover);
+  border-radius:var(--r);font-size:12px;font-weight:600;
+  font-family:var(--font);color:var(--text-sec);
+  cursor:pointer;transition:all .15s;text-align:center;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-toggle:hover{border-color:var(--green-bright);color:var(--green-dark);background:var(--primary-bg)}
+.btn-toggle.active{background:var(--green-dark);border-color:var(--green-dark);color:#fff}
+.btn-toggle.active-day{background:#1a3320;border-color:#1a3320;color:#fff}
+.btn-toggle.active-night{background:#1e293b;border-color:#334155;color:#e2e8f0}
+
 /* KPIs DASHBOARD */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin-bottom:1rem}
 .kpi{background:var(--bg-panel);border:1px solid var(--border-base);border-radius:var(--r2);padding:.6rem 1rem;position:relative;overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .2s}
@@ -724,48 +800,66 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
         <div class="fcard">
           <div class="fsep">Datos generales</div>
           <div class="row3">
-            <div class="field"><label>Fecha</label><input type="date" id="f-fecha"></div>
+            <div class="field"><label>Fecha</label><input type="date" id="f-fecha" onchange="saveDraft('f')"></div>
             <div class="field"><label>Área</label><div class="ss-wrap" id="ss-wrap-f-area"><input class="ss-input" id="ss-f-area" placeholder="--Todos--" data-placeholder="Seleccionar área…" autocomplete="off" oninput="ssInputFilter('f-area',this.value)" onfocus="ssOpen('f-area')" onblur="ssBlur('f-area')"><div class="ss-icons"><button type="button" class="ss-clear" id="ss-clr-f-area" onclick="ssClear('f-area')" tabindex="-1">&#x2715;</button><svg class="ss-arrow" id="ss-arr-f-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg></div><div class="ss-drop" id="ss-drop-f-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-area',this.value)" id="ss-search-f-area"><div class="ss-list" id="ss-list-f-area"></div></div></div><input type="hidden" id="f-area"></div>
             <div class="field"><label>Responsable</label><div class="ss-wrap" id="ss-wrap-f-resp"><input class="ss-input" id="ss-f-resp" placeholder="--Todos--" data-placeholder="Seleccionar responsable…" autocomplete="off" oninput="ssInputFilter('f-resp',this.value)" onfocus="ssOpen('f-resp')" onblur="ssBlur('f-resp')"><div class="ss-icons"><button type="button" class="ss-clear" id="ss-clr-f-resp" onclick="ssClear('f-resp')" tabindex="-1">&#x2715;</button><svg class="ss-arrow" id="ss-arr-f-resp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg></div><div class="ss-drop" id="ss-drop-f-resp"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-resp',this.value)" id="ss-search-f-resp"><div class="ss-list" id="ss-list-f-resp"></div></div></div><input type="hidden" id="f-resp"></div>
           </div>
           <div class="fsep">Trabajo del día</div>
           <div class="row3">
             <div class="field"><label>Tipo de personal</label>
-              <select id="f-tipo" onchange="toggleContratista()"><option value="">Seleccionar…</option><option value="Propio">Propio</option><option value="Contrata">Contrata</option></select>
+              <div class="btn-toggle-group" id="f-tipo-group">
+                <button type="button" class="btn-toggle" data-val="Propio" onclick="setTipo('Propio','f')">Propio</button>
+                <button type="button" class="btn-toggle" data-val="Contrata" onclick="setTipo('Contrata','f')">Contrata</button>
+              </div>
+              <input type="hidden" id="f-tipo">
             </div>
             <div class="field" id="field-contratista" style="display:none"><label>Contratista</label><div class="ss-wrap" id="ss-wrap-f-contratista"><input class="ss-input" id="ss-f-contratista" placeholder="--Todos--" data-placeholder="Seleccionar contratista…" autocomplete="off" oninput="ssInputFilter('f-contratista',this.value)" onfocus="ssOpen('f-contratista')" onblur="ssBlur('f-contratista')"><div class="ss-icons"><button type="button" class="ss-clear" id="ss-clr-f-contratista" onclick="ssClear('f-contratista')" tabindex="-1">&#x2715;</button><svg class="ss-arrow" id="ss-arr-f-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg></div><div class="ss-drop" id="ss-drop-f-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-contratista',this.value)" id="ss-search-f-contratista"><div class="ss-list" id="ss-list-f-contratista"></div></div></div><input type="hidden" id="f-contratista"></div>
             <div class="field"><label>Actividad</label><div class="ss-wrap" id="ss-wrap-f-act"><input class="ss-input" id="ss-f-act" placeholder="--Todos--" data-placeholder="Seleccionar actividad…" autocomplete="off" oninput="ssInputFilter('f-act',this.value)" onfocus="ssOpen('f-act')" onblur="ssBlur('f-act')"><div class="ss-icons"><button type="button" class="ss-clear" id="ss-clr-f-act" onclick="ssClear('f-act')" tabindex="-1">&#x2715;</button><svg class="ss-arrow" id="ss-arr-f-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg></div><div class="ss-drop" id="ss-drop-f-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('f-act',this.value)" id="ss-search-f-act"><div class="ss-list" id="ss-list-f-act"></div></div></div><input type="hidden" id="f-act"></div>
-            <div class="field"><label>Tarea / Meta</label><input type="number" id="f-tarea" min="0" step="any" placeholder="0"></div>
-            <div class="field"><label>N° personas</label><input type="number" id="f-np" min="1" max="999" placeholder="0"></div>
+            <div class="field"><label>Tarea / Meta</label><input type="number" id="f-tarea" min="0" step="any" placeholder="0" oninput="saveDraft('f')"></div>
+            <div class="field"><label>N° personas</label><input type="number" id="f-np" min="1" max="999" placeholder="0" oninput="saveDraft('f')"></div>
+            <div class="field"><label>Turno</label>
+              <div class="btn-toggle-group" id="f-turno-group">
+                <button type="button" class="btn-toggle" data-val="Dia" onclick="setTurno('Dia','f')">Día</button>
+                <button type="button" class="btn-toggle" data-val="Noche" onclick="setTurno('Noche','f')">Noche</button>
+              </div>
+              <input type="hidden" id="f-turno">
+            </div>
           </div>
           <div class="row3">
-            <div class="field"><label>Hora de inicio</label><input type="time" id="f-hora"></div>
-            <div class="field"><label>Hora de término</label><input type="time" id="f-hora-fin"></div>
+            <div class="field"><label>Hora de inicio</label><input type="time" id="f-hora" onchange="saveDraft('f')"></div>
+            <div class="field"><label>Hora de término</label><input type="time" id="f-hora-fin" onchange="saveDraft('f')"></div>
           </div>
           <div class="row2">
             <div class="field">
-              <label>Lotes / Ubicación</label>
-              <div style="position:relative" id="lotes-selector-wrap">
-                <button type="button" id="lotes-btn" onclick="toggleLotesDD()" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:13px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left;transition:all .2s">
-                  <span id="lotes-btn-label">Seleccionar lotes…</span>
-                  <svg id="lotes-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
-                </button>
-                <div id="lotes-dropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg-panel);border:1px solid var(--border-hover);border-radius:var(--r);z-index:200;box-shadow:0 10px 30px rgba(0,0,0,.5);overflow:hidden">
-                  <div style="padding:8px;border-bottom:1px solid var(--border-base)">
-                    <input type="text" id="lotes-search" placeholder="Buscar lote o cultivo…" oninput="renderLotesDD()" style="width:100%;padding:8px 12px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:13px;font-family:var(--font);color:var(--text-main);outline:none">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
+                <label style="margin-bottom:0">Lotes / Ubicación</label>
+                <button type="button" id="lotes-clear-btn" onclick="ssmReset('lotes')" style="display:none;font-size:11px;font-weight:600;color:var(--text-sec);background:none;border:1px solid var(--border-hover);border-radius:6px;padding:2px 8px;cursor:pointer;font-family:var(--font);transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border-hover)';this.style.color='var(--text-sec)'">✕ Limpiar todo</button>
+              </div>
+              <div class="ssm-wrap" id="ssm-wrap-lotes">
+                <input class="ssm-input" id="ssm-lotes-input" placeholder="--Todos--"
+                  autocomplete="off"
+                  oninput="ssmFilter('lotes',this.value)"
+                  onfocus="ssmOpen('lotes')">
+                <svg class="ssm-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg>
+                <div class="ssm-drop" id="ssm-drop-lotes">
+                  <div class="ssm-search-row">
+                    <input class="ssm-search" id="ssm-search-lotes" placeholder="Buscar lote o cultivo…" oninput="ssmFilter('lotes',this.value)">
                   </div>
-                  <div onclick="toggleTodosLotesDD()" style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border-base);cursor:pointer;background:var(--bg-base)">
-                    <input type="checkbox" id="lotes-chk-all" style="accent-color:var(--green-dark);cursor:pointer;width:14px;height:14px;flex-shrink:0" onclick="event.stopPropagation()">
+                  <div class="ssm-all-row" onmousedown="ssmToggleAll('lotes',event)">
+                    <span class="ssm-chk" id="ssm-chk-all-lotes"></span>
                     <span style="font-size:12px;font-weight:600;color:var(--text-sec)">Seleccionar todos</span>
-                    <span id="lotes-total-badge" style="margin-left:auto;font-size:11px;color:var(--text-muted);font-family:var(--mono)"></span>
+                    <span id="ssm-badge-lotes" style="margin-left:auto;font-size:11px;color:var(--text-muted);font-family:var(--mono)"></span>
                   </div>
-                  <div id="lotes-dd-list" style="max-height:260px;overflow-y:auto"></div>
+                  <div class="ssm-list" id="ssm-list-lotes"></div>
+                  <div style="padding:8px;border-top:1px solid var(--border-base);text-align:right;background:var(--bg-base)">
+                    <button type="button" onmousedown="ssmClose('lotes')" style="padding:6px 16px;background:var(--green-dark);color:#fff;border:none;border-radius:var(--r);font-size:12px;font-weight:600;font-family:var(--font);cursor:pointer">Listo</button>
+                  </div>
                 </div>
               </div>
               <div id="lotes-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
             </div>
           </div>
-          <div class="field"><label>Observaciones (Opcional)</label><textarea id="f-obs" placeholder="Condiciones del campo, metas, incidencias…"></textarea></div>
+          <div class="field"><label>Observaciones (Opcional)</label><textarea id="f-obs" placeholder="Condiciones del campo, metas, incidencias…" oninput="saveDraft('f')"></textarea></div>
           <div id="reg-err" class="alert alert-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="reg-err-t">Completa todos los campos.</span></div>
           <div id="reg-ok" class="alert alert-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Registro guardado y sincronizado.</div>
           <div id="reg-sav" style="display:none;align-items:center;gap:10px;font-size:12px;font-weight:500;color:var(--text-sec);margin-top:1rem"><div class="spinner"></div>Guardando…</div>
@@ -943,7 +1037,7 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
     </div>
     <div class="mob-form-body">
       <div style="font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-base)">Datos generales</div>
-      <div class="field"><label>Fecha</label><input type="date" id="mf-fecha"></div>
+      <div class="field"><label>Fecha</label><input type="date" id="mf-fecha" onchange="saveDraft('mf')"></div>
       <div class="field"><label>Área</label>
         <div class="ss-wrap" id="ss-wrap-mf-area"><input class="ss-input" id="ss-mf-area" placeholder="--Todos--" data-placeholder="Seleccionar área…" autocomplete="off" oninput="ssInputFilter('mf-area',this.value)" onfocus="ssOpen('mf-area')" onblur="ssBlur('mf-area')"><div class="ss-icons"><button type="button" class="ss-clear" id="ss-clr-mf-area" onclick="ssClear('mf-area')" tabindex="-1">&#x2715;</button><svg class="ss-arrow" id="ss-arr-mf-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg></div><div class="ss-drop" id="ss-drop-mf-area"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-area',this.value)" id="ss-search-mf-area"><div class="ss-list" id="ss-list-mf-area"></div></div></div>
         <input type="hidden" id="mf-area">
@@ -954,9 +1048,11 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
       </div>
       <div style="font-size:10px;font-weight:700;color:var(--text-label);text-transform:uppercase;letter-spacing:.06em;margin:.5rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border-base)">Trabajo del día</div>
       <div class="field"><label>Tipo de personal</label>
-        <select id="mf-tipo" onchange="toggleMobContratista()" style="width:100%;padding:10px 12px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:16px;font-family:var(--font);color:var(--text-main);outline:none;appearance:none;-webkit-appearance:none">
-          <option value="">Seleccionar…</option><option value="Propio">Propio</option><option value="Contrata">Contrata</option>
-        </select>
+        <div class="btn-toggle-group" id="mf-tipo-group">
+          <button type="button" class="btn-toggle" data-val="Propio" onclick="setTipo('Propio','mf')" style="padding:12px;font-size:14px">Propio</button>
+          <button type="button" class="btn-toggle" data-val="Contrata" onclick="setTipo('Contrata','mf')" style="padding:12px;font-size:14px">Contrata</button>
+        </div>
+        <input type="hidden" id="mf-tipo">
       </div>
       <div class="field" id="mfield-contratista" style="display:none"><label>Contratista</label>
         <div class="ss-wrap" id="ss-wrap-mf-contratista"><input class="ss-input" id="ss-mf-contratista" placeholder="--Todos--" data-placeholder="Seleccionar contratista…" autocomplete="off" oninput="ssInputFilter('mf-contratista',this.value)" onfocus="ssOpen('mf-contratista')" onblur="ssBlur('mf-contratista')"><div class="ss-icons"><button type="button" class="ss-clear" id="ss-clr-mf-contratista" onclick="ssClear('mf-contratista')" tabindex="-1">&#x2715;</button><svg class="ss-arrow" id="ss-arr-mf-contratista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg></div><div class="ss-drop" id="ss-drop-mf-contratista"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-contratista',this.value)" id="ss-search-mf-contratista"><div class="ss-list" id="ss-list-mf-contratista"></div></div></div>
@@ -966,21 +1062,48 @@ tr.reg-selected td{background:rgba(74,153,96,.06)!important}
         <div class="ss-wrap" id="ss-wrap-mf-act"><input class="ss-input" id="ss-mf-act" placeholder="--Todos--" data-placeholder="Seleccionar actividad…" autocomplete="off" oninput="ssInputFilter('mf-act',this.value)" onfocus="ssOpen('mf-act')" onblur="ssBlur('mf-act')"><div class="ss-icons"><button type="button" class="ss-clear" id="ss-clr-mf-act" onclick="ssClear('mf-act')" tabindex="-1">&#x2715;</button><svg class="ss-arrow" id="ss-arr-mf-act" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg></div><div class="ss-drop" id="ss-drop-mf-act"><input class="ss-search" placeholder="Buscar…" oninput="ssFilter('mf-act',this.value)" id="ss-search-mf-act"><div class="ss-list" id="ss-list-mf-act"></div></div></div>
         <input type="hidden" id="mf-act">
       </div>
-      <div class="field"><label>Tarea / Meta</label><input type="number" id="mf-tarea" min="0" step="any" placeholder="0" inputmode="decimal" style="font-size:16px"></div>
-      <div class="field"><label>N° personas</label><input type="number" id="mf-np" min="1" max="999" placeholder="0" inputmode="numeric" style="font-size:16px"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
-        <div class="field"><label>Hora inicio</label><input type="time" id="mf-hora" style="font-size:16px"></div>
-        <div class="field"><label>Hora término</label><input type="time" id="mf-hora-fin" style="font-size:16px"></div>
+      <div class="field"><label>Tarea / Meta</label><input type="number" id="mf-tarea" min="0" step="any" placeholder="0" inputmode="decimal" style="font-size:16px" oninput="saveDraft('mf')"></div>
+      <div class="field"><label>N° personas</label><input type="number" id="mf-np" min="1" max="999" placeholder="0" inputmode="numeric" style="font-size:16px" oninput="saveDraft('mf')"></div>
+      <div class="field"><label>Turno</label>
+        <div class="btn-toggle-group" id="mf-turno-group">
+          <button type="button" class="btn-toggle" data-val="Dia" onclick="setTurno('Dia','mf')" style="padding:12px;font-size:14px">Día</button>
+          <button type="button" class="btn-toggle" data-val="Noche" onclick="setTurno('Noche','mf')" style="padding:12px;font-size:14px">Noche</button>
+        </div>
+        <input type="hidden" id="mf-turno">
       </div>
-      <div class="field"><label>Lotes / Ubicación</label>
-        <button type="button" id="mob-lotes-btn" onclick="toggleMobLotesDD()" style="width:100%;padding:10px 14px;background:var(--bg-input);border:1px solid var(--border-hover);border-radius:var(--r);font-size:16px;font-family:var(--font);color:var(--text-sec);display:flex;align-items:center;justify-content:space-between;cursor:pointer;text-align:left">
-          <span id="mob-lotes-btn-label">Seleccionar lotes…</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div id="mob-lotes-dropdown" style="display:none;border:1px solid var(--border-hover);border-top:none;border-radius:0 0 var(--r) var(--r);max-height:260px;overflow-y:auto;background:var(--bg-panel)"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div class="field"><label>Hora inicio</label><input type="time" id="mf-hora" style="font-size:16px" onchange="saveDraft('mf')"></div>
+        <div class="field"><label>Hora término</label><input type="time" id="mf-hora-fin" style="font-size:16px" onchange="saveDraft('mf')"></div>
+      </div>
+      <div class="field">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
+          <label style="margin-bottom:0">Lotes / Ubicación</label>
+          <button type="button" id="mf-lotes-clear-btn" onclick="ssmReset('mf-lotes')" style="display:none;font-size:12px;font-weight:600;color:var(--text-sec);background:none;border:1px solid var(--border-hover);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:var(--font)" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border-hover)';this.style.color='var(--text-sec)'">✕ Limpiar</button>
+        </div>
+        <div class="ssm-wrap" id="ssm-wrap-mf-lotes">
+          <input class="ssm-input" id="ssm-mf-lotes-input" placeholder="--Todos--"
+            autocomplete="off" style="font-size:16px;padding:12px 36px 12px 12px"
+            oninput="ssmFilter('mf-lotes',this.value)"
+            onfocus="ssmOpen('mf-lotes')">
+          <svg class="ssm-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="ssm-drop" id="ssm-drop-mf-lotes">
+            <div class="ssm-search-row">
+              <input class="ssm-search" id="ssm-search-mf-lotes" placeholder="Buscar lote o cultivo…" oninput="ssmFilter('mf-lotes',this.value)" style="font-size:16px;padding:10px 12px">
+            </div>
+            <div class="ssm-all-row" onmousedown="ssmToggleAll('mf-lotes',event)">
+              <span class="ssm-chk" id="ssm-chk-all-mf-lotes"></span>
+              <span style="font-size:14px;font-weight:600;color:var(--text-sec)">Seleccionar todos</span>
+              <span id="ssm-badge-mf-lotes" style="margin-left:auto;font-size:12px;color:var(--text-muted);font-family:var(--mono)"></span>
+            </div>
+            <div class="ssm-list" id="ssm-list-mf-lotes" style="max-height:220px"></div>
+            <div style="padding:8px;border-top:1px solid var(--border-base);text-align:right;background:var(--bg-base)">
+              <button type="button" onmousedown="ssmClose('mf-lotes')" style="padding:10px 20px;background:var(--green-dark);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;width:100%">Listo</button>
+            </div>
+          </div>
+        </div>
         <div id="mob-lotes-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
       </div>
-      <div class="field"><label>Observaciones (Opcional)</label><textarea id="mf-obs" placeholder="Condiciones, metas, incidencias…" style="font-size:16px;min-height:80px"></textarea></div>
+      <div class="field"><label>Observaciones (Opcional)</label><textarea id="mf-obs" placeholder="Condiciones, metas, incidencias…" style="font-size:16px;min-height:80px" oninput="saveDraft('mf')"></textarea></div>
       <div id="mf-err" class="alert alert-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="mf-err-t">Completa todos los campos.</span></div>
       <div id="mf-ok" class="alert alert-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Registro guardado.</div>
     </div>
@@ -1709,23 +1832,102 @@ function renderBars(id, obj, grads, limit=8, desglose=null){
 }
 
 /* ═══════════ FORM ═══════════ */
+
+/* ══════════════════════════════════════════════════
+   PERSISTENCIA DEL FORMULARIO (draft)
+══════════════════════════════════════════════════ */
+const DRAFT_KEY     = 'agro_form_draft';
+const DRAFT_MOB_KEY = 'agro_mob_form_draft';
+
+function saveDraft(prefix){
+  const key = prefix==='f' ? DRAFT_KEY : DRAFT_MOB_KEY;
+  const ids = prefix==='f'
+    ? ['f-fecha','f-area','f-resp','f-tipo','f-contratista','f-act','f-tarea','f-np','f-hora','f-hora-fin','f-turno','f-obs']
+    : ['mf-fecha','mf-area','mf-resp','mf-tipo','mf-contratista','mf-act','mf-tarea','mf-np','mf-hora','mf-hora-fin','mf-turno','mf-obs'];
+  const draft = {};
+  ids.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) draft[id] = el.value;
+  });
+  // Guardar lotes seleccionados
+  const ssmId = prefix==='f' ? 'lotes' : 'mf-lotes';
+  draft['_lotes'] = [...(SSM_SEL[ssmId]||new Set())];
+  // Guardar botones activos (tipo y turno)
+  const tipoBtn = document.querySelector('#'+prefix+'-tipo-group .btn-toggle.active');
+  draft['_tipo_active'] = tipoBtn?.dataset.val||'';
+  const turnoBtn = document.querySelector('#'+prefix+'-turno-group .btn-toggle.active');
+  draft['_turno_active'] = turnoBtn?.dataset.val||'';
+  try{ localStorage.setItem(key, JSON.stringify(draft)); }catch(e){}
+}
+
+function loadDraft(prefix){
+  const key = prefix==='f' ? DRAFT_KEY : DRAFT_MOB_KEY;
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return false;
+    const draft = JSON.parse(raw);
+    // Restaurar campos de texto/fecha/número
+    const ids = prefix==='f'
+      ? ['f-fecha','f-tarea','f-np','f-hora','f-hora-fin','f-obs']
+      : ['mf-fecha','mf-tarea','mf-np','mf-hora','mf-hora-fin','mf-obs'];
+    ids.forEach(id=>{ const el=document.getElementById(id); if(el&&draft[id]!=null) el.value=draft[id]; });
+    // Restaurar ss (área, resp, act, contratista)
+    const ssIds = prefix==='f'
+      ? ['f-area','f-resp','f-act','f-contratista']
+      : ['mf-area','mf-resp','mf-act','mf-contratista'];
+    ssIds.forEach(id=>{
+      if(draft[id]){
+        const hid=document.getElementById(id);
+        const vis=document.getElementById('ss-'+id);
+        if(hid) hid.value=draft[id];
+        if(vis){ vis.value=draft[id]; vis.placeholder='--Todos--'; }
+        const wrap=document.getElementById('ss-wrap-'+id);
+        if(wrap&&draft[id]) wrap.classList.add('ss-has-value');
+      }
+    });
+    // Restaurar tipo de personal
+    if(draft['_tipo_active']) setTipo(draft['_tipo_active'], prefix);
+    // Restaurar turno
+    if(draft['_turno_active']) setTurno(draft['_turno_active'], prefix);
+    // Restaurar contratista visibility
+    if(prefix==='f') toggleContratista(draft['f-tipo']||draft['_tipo_active']);
+    else toggleMobContratista(draft['mf-tipo']||draft['_tipo_active']);
+    // Restaurar lotes
+    const ssmId = prefix==='f' ? 'lotes' : 'mf-lotes';
+    if(draft['_lotes']?.length){
+      SSM_SEL[ssmId] = new Set(draft['_lotes']);
+      ssmUpdateTags(ssmId);
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+function clearDraft(prefix){
+  const key = prefix==='f' ? DRAFT_KEY : DRAFT_MOB_KEY;
+  try{ localStorage.removeItem(key); }catch(e){}
+}
+
 function initForm(){
-  document.getElementById('f-fecha').value=isoHoy();
-  document.getElementById('f-hora').value='07:00';
-  if(document.getElementById('f-hora-fin'))document.getElementById('f-hora-fin').value='17:36';
-  if(document.getElementById('f-tarea'))document.getElementById('f-tarea').value='';
+  // Cargar maestros en los ss
   pSel('f-area',DB.maestros.areas);
   pSel('f-resp', DB.maestros.responsables.map(r => typeof r === 'string' ? r : (r.nombreCorto || r.nombres)));
   pSel('f-act', DB.maestros.actividades.map(a => typeof a === 'string' ? a : (a.actividad || '')));
   ssLoad('f-contratista', (DB.maestros.contratas||[]).map(c=>typeof c==='string'?c:(c.nombreCorto||c.razon||'')).filter(Boolean));
-  // Reset searchable selects
-  ['f-area','f-resp','f-act','f-contratista'].forEach(id=>{ssReset(id);});
-  document.getElementById('f-tipo').value='';
-  toggleContratista();
   S.lotes=[];initCascada();
   document.getElementById('reg-err').classList.remove('show');
   document.getElementById('reg-ok').classList.remove('show');
   document.getElementById('reg-sav').style.display='none';
+  // Intentar restaurar draft; si no hay, inicializar vacío
+  const hasDraft = loadDraft('f');
+  if(!hasDraft){
+    document.getElementById('f-fecha').value=isoHoy();
+    document.getElementById('f-hora').value='';
+    if(document.getElementById('f-hora-fin'))document.getElementById('f-hora-fin').value='';
+    if(document.getElementById('f-tarea'))document.getElementById('f-tarea').value='';
+    ['f-area','f-resp','f-act','f-contratista'].forEach(id=>{ssReset(id);});
+    document.getElementById('f-tipo').value='';
+    toggleContratista();
+  }
 }
 
 /* ═══════════ SELECTOR DE LOTES (dropdown agrupado por módulo) ═══════════ */
@@ -1944,25 +2146,42 @@ async function guardarRegistro(){
   const errEl=document.getElementById('reg-err');
   const okEl=document.getElementById('reg-ok');
   errEl.classList.remove('show');okEl.classList.remove('show');
-  if(!area||!resp||!tipo||!act||!np||!hora||!S.lotes.length){
-    document.getElementById('reg-err-t').textContent='Completa todos los campos y selecciona al menos un lote.';
-    errEl.classList.add('show');return;
+  // Validación campo por campo con mensaje específico
+  const validaciones = [
+    [!fecha,          'Selecciona una fecha.'],
+    [!area,           'Selecciona un Área.'],
+    [!resp,           'Selecciona un Responsable.'],
+    [!tipo,           'Selecciona el Tipo de personal (Propio o Contrata).'],
+    [tipo==='Contrata'&&!contratista, 'Selecciona el Contratista.'],
+    [!act,            'Selecciona una Actividad.'],
+    [!np||np<=0,      'Ingresa el N° de personas (debe ser mayor a 0).'],
+    [!hora,           'Selecciona la Hora de inicio.'],
+    [!horaFin,        'Selecciona la Hora de término.'],
+    [!(SSM_SEL['lotes']?.size), 'Selecciona al menos un lote.'],
+  ];
+  const error = validaciones.find(([cond])=>cond);
+  if(error){
+    document.getElementById('reg-err-t').textContent = error[1];
+    errEl.classList.add('show');
+    errEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+    return;
   }
-  const reg={fecha,hora,horaFin,area,responsable:resp,lotes:getLotesStringParaGuardar(),tipo,contratista:tipo==='Contrata'?contratista:'',actividad:act,tarea,nPersonas:np,obs,registradoPor:S.usuario?.nombre||'',timestamp:new Date().toISOString()};
+  const reg={fecha,hora,horaFin,area,responsable:resp,lotes:ssmGetSelected('lotes'),tipo,contratista:tipo==='Contrata'?contratista:'',actividad:act,tarea,nPersonas:np,obs,registradoPor:S.usuario?.nombre||'',timestamp:new Date().toISOString()};
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;document.getElementById('reg-sav').style.display='flex';
   try{
     await enviarASheets(reg);
     S.registros.push(reg);
+    clearDraft('f');
     document.getElementById('reg-sav').style.display='none';
     okEl.classList.add('show');sync('ok','sincronizado');
-    ['f-area','f-resp','f-tipo','f-act'].forEach(id=>document.getElementById(id).value='');
+    ['f-area','f-resp','f-tipo','f-act','f-turno'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); document.querySelectorAll('#f-tipo-group .btn-toggle, #f-turno-group .btn-toggle').forEach(b=>b.classList.remove('active'));
     ['f-area','f-resp','f-act','f-contratista'].forEach(id=>ssReset(id));
     toggleContratista();
     document.getElementById('f-np').value='';
     document.getElementById('f-obs').value='';
     document.getElementById('f-hora').value=horaAhora();
-    S.lotes=[];initCascada();
+    ssmReset('lotes');initCascada();
     setTimeout(()=>okEl.classList.remove('show'),4000);
   }catch(e){
     document.getElementById('reg-sav').style.display='none';
@@ -3741,6 +3960,9 @@ function ssPick(id, val){
   wrap?.classList.toggle('ss-has-value', !!val);
   document.getElementById('ss-drop-'+id)?.classList.remove('open');
   if(id==='fil-dash-act') renderInicio();
+  // Autosave draft si es campo de formulario
+  if(id.startsWith('f-')&&!id.startsWith('f-hora')&&!id.startsWith('fil-')) saveDraft('f');
+  if(id.startsWith('mf-')) saveDraft('mf');
 }
 
 function ssClear(id){
@@ -3748,9 +3970,210 @@ function ssClear(id){
 }
 
 
+
+/* ── TIPO DE PERSONAL — botones ── */
+function setTipo(val, prefix){
+  const hid = document.getElementById(prefix+'-tipo');
+  if(hid) hid.value = val;
+  const group = document.getElementById(prefix+'-tipo-group');
+  if(group){
+    group.querySelectorAll('.btn-toggle').forEach(b=>{
+      b.classList.toggle('active', b.dataset.val===val);
+    });
+  }
+  if(prefix==='f'){ toggleContratista(val); saveDraft('f'); }
+  else{ toggleMobContratista(val); saveDraft('mf'); }
+}
+
+/* ── TURNO — botones con horas automáticas ── */
+function setTurno(val, prefix){
+  const hid = document.getElementById(prefix+'-turno');
+  if(hid) hid.value = val;
+  const group = document.getElementById(prefix+'-turno-group');
+  if(group) group.querySelectorAll('.btn-toggle').forEach(b=>b.classList.toggle('active', b.dataset.val===val));
+  const hora    = document.getElementById(prefix==='f'?'f-hora':'mf-hora');
+  const horaFin = document.getElementById(prefix==='f'?'f-hora-fin':'mf-hora-fin');
+  if(val==='Dia'){
+    if(hora) hora.value='07:00';
+    if(horaFin) horaFin.value='17:36';
+  } else {
+    if(hora) hora.value='18:00';
+    if(horaFin) horaFin.value='06:00';
+  }
+}
+
+/* ── SSM — MULTISELECT ENGINE (Lotes) ── */
+// SSM_SEL: { id: Set of selected values }
+const SSM_SEL = {};
+
+function ssmGetLotes(id){
+  // Retorna todos los lotes del sistema como array de objetos
+  return getGruposModulo().flatMap(g=>g.lotes);
+}
+
+function ssmOpen(id){
+  const wrap = document.getElementById('ssm-wrap-'+id);
+  const inp  = document.getElementById('ssm-'+id+'-input');
+  if(!wrap) return;
+  // Cerrar otros dropdowns SS pero no ssm
+  ssCloseAll();
+  wrap.classList.add('ssm-open');
+  if(inp){ inp.value=''; inp.placeholder='Buscar…'; }
+  ssmRender(id, '');
+  // Focus permanece en el input principal
+}
+
+function ssmBlur(id){
+  // No cerrar — el dropdown se cierra solo con el botón "Listo" o clic fuera
+}
+
+// Cerrar ssm al hacer clic fuera (no dentro del dropdown)
+document.addEventListener('mousedown', function(e){
+  document.querySelectorAll('.ssm-wrap.ssm-open').forEach(wrap=>{
+    if(!wrap.contains(e.target)){
+      const id = wrap.id.replace('ssm-wrap-','');
+      ssmClose(id);
+    }
+  });
+}, true);
+
+function ssmClose(id){
+  const wrap = document.getElementById('ssm-wrap-'+id);
+  const inp  = document.getElementById('ssm-'+id+'-input');
+  wrap?.classList.remove('ssm-open');
+  if(inp){
+    const cnt = SSM_SEL[id]?.size || 0;
+    inp.value = '';
+    inp.placeholder = cnt===0 ? '--Todos--' : cnt+' lote'+(cnt>1?'s':'')+' seleccionado'+(cnt>1?'s':'');
+  }
+  ssmUpdateTags(id);
+  // Devolver foco al input para UX fluida
+  setTimeout(()=>inp?.blur(), 50);
+}
+
+function ssmFilter(id, q){
+  const wrap = document.getElementById('ssm-wrap-'+id);
+  if(!wrap?.classList.contains('ssm-open')) ssmOpen(id);
+  ssmRender(id, q.toLowerCase().trim());
+}
+
+function ssmRender(id, q){
+  const list  = document.getElementById('ssm-list-'+id);
+  if(!list) return;
+  if(!SSM_SEL[id]) SSM_SEL[id] = new Set();
+  const sel   = SSM_SEL[id];
+  const todos = ssmGetLotes(id);
+  const filtered = q ? todos.filter(l=>
+    String(l.n).includes(q) ||
+    (l.cult||'').toLowerCase().includes(q) ||
+    (l.modulo||'').toLowerCase().includes(q) ||
+    (l.etapa||'').toLowerCase().includes(q)
+  ) : todos;
+
+  // Actualizar "Seleccionar todos"
+  const allChk = document.getElementById('ssm-chk-all-'+id);
+  const badge  = document.getElementById('ssm-badge-'+id);
+  const allSel = filtered.length > 0 && filtered.every(l=>sel.has(l.n));
+  const someSel= filtered.some(l=>sel.has(l.n));
+  if(allChk){
+    allChk.style.background = allSel ? 'var(--green-bright)' : someSel ? 'var(--primary-bg)' : '';
+    allChk.style.borderColor = (allSel||someSel) ? 'var(--green-bright)' : '';
+    allChk.innerHTML = allSel
+      ? '<svg width="9" height="9" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : someSel ? '<svg width="8" height="2" viewBox="0 0 8 2"><line x1="0" y1="1" x2="8" y2="1" stroke="var(--green-dark)" stroke-width="2"/></svg>' : '';
+  }
+  if(badge) badge.textContent = sel.size ? sel.size+'/'+todos.length : todos.length+' lotes';
+
+  if(!filtered.length){
+    list.innerHTML = '<div class="ss-empty">Sin resultados</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(l=>{
+    const isSel = sel.has(l.n);
+    const chk = isSel
+      ? '<svg width="9" height="9" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '';
+    return `<div class="ssm-opt${isSel?' selected':''}" onmousedown="ssmToggle('${id}',${l.n})">
+      <span class="ssm-chk">${chk}</span>
+      <div class="ssm-opt-info">
+        <div class="ssm-opt-main">${l.n} &nbsp;<span style="font-weight:400;color:var(--text-muted)">${l.cult||''}</span></div>
+        <div class="ssm-opt-sub">${l.modulo||''} · ${l.etapa||''}</div>
+      </div>
+      ${l.ha ? `<span class="ssm-opt-ha">${parseFloat(l.ha).toFixed(2)} ha</span>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function ssmToggle(id, n, event){
+  if(event) event.preventDefault();
+  if(!SSM_SEL[id]) SSM_SEL[id] = new Set();
+  const sel = SSM_SEL[id];
+  if(sel.has(n)) sel.delete(n); else sel.add(n);
+  const q = document.getElementById('ssm-search-'+id)?.value||'';
+  ssmRender(id, q.toLowerCase().trim());
+  ssmUpdateTags(id);
+  if(id==='lotes') saveDraft('f');
+  if(id==='mf-lotes') saveDraft('mf');
+}
+
+function ssmToggleAll(id, event){
+  if(event) event.preventDefault();
+  if(!SSM_SEL[id]) SSM_SEL[id] = new Set();
+  const sel = SSM_SEL[id];
+  const q   = (document.getElementById('ssm-search-'+id)?.value||'').toLowerCase().trim();
+  const todos= ssmGetLotes(id);
+  const filtered = q ? todos.filter(l=>String(l.n).includes(q)||(l.cult||'').toLowerCase().includes(q)||(l.modulo||'').toLowerCase().includes(q)) : todos;
+  const allSel = filtered.every(l=>sel.has(l.n));
+  if(allSel) filtered.forEach(l=>sel.delete(l.n));
+  else filtered.forEach(l=>sel.add(l.n));
+  ssmRender(id, q);
+  ssmUpdateTags(id);
+}
+
+function ssmUpdateTags(id){
+  const tagsId = id==='lotes' ? 'lotes-tags' : 'mob-lotes-tags';
+  const tags = document.getElementById(tagsId);
+  if(!tags) return;
+  const sel = SSM_SEL[id] || new Set();
+  const cnt = sel.size;
+  const inp = document.getElementById('ssm-'+id+'-input');
+  if(inp && !document.getElementById('ssm-wrap-'+id)?.classList.contains('ssm-open')){
+    inp.placeholder = cnt===0 ? '--Todos--' : cnt+' lote'+(cnt>1?'s':'')+' seleccionado'+(cnt>1?'s':'');
+  }
+  // Mostrar/ocultar botón Limpiar todo
+  const clearBtnId = id==='lotes' ? 'lotes-clear-btn' : 'mf-lotes-clear-btn';
+  const clearBtn = document.getElementById(clearBtnId);
+  if(clearBtn) clearBtn.style.display = cnt>0 ? '' : 'none';
+  if(cnt===0){ tags.innerHTML=''; return; }
+  const todos = ssmGetLotes(id);
+  const selArr = todos.filter(l=>sel.has(l.n));
+  // Tags individuales siempre
+  tags.innerHTML = selArr.map(l=>`<span style="display:inline-flex;align-items:center;gap:4px;background:var(--primary-bg);color:var(--green-dark);border:1px solid var(--primary-b);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600">${l.n}<button type="button" onmousedown="ssmToggle('${id}',${l.n},event)" style="background:none;border:none;cursor:pointer;color:var(--green-mid);padding:0;font-size:13px;line-height:1;display:flex">&times;</button></span>`).join(' ');
+}
+
+function ssmGetSelected(id){
+  // Retorna string con lotes seleccionados para guardar en registro
+  const sel = SSM_SEL[id] || new Set();
+  return [...sel].sort((a,b)=>a-b).join(', ');
+}
+
+function ssmReset(id){
+  SSM_SEL[id] = new Set();
+  const inp = document.getElementById('ssm-'+id+'-input');
+  if(inp){ inp.value=''; inp.placeholder='--Todos--'; }
+  document.getElementById('ssm-wrap-'+id)?.classList.remove('ssm-open');
+  const tagsId = id==='lotes' ? 'lotes-tags' : 'mob-lotes-tags';
+  const tags = document.getElementById(tagsId);
+  if(tags) tags.innerHTML='';
+  const clearBtnId = id==='lotes' ? 'lotes-clear-btn' : 'mf-lotes-clear-btn';
+  const clearBtn = document.getElementById(clearBtnId);
+  if(clearBtn) clearBtn.style.display='none';
+}
+
 /* ── TOGGLE CONTRATISTA ── */
-function toggleContratista(){
-  const tipo = document.getElementById('f-tipo')?.value;
+function toggleContratista(tipo_val){
+  const tipo = tipo_val || document.getElementById('f-tipo')?.value;
   const field = document.getElementById('field-contratista');
   if(field){
     field.style.display = tipo==='Contrata' ? '' : 'none';
@@ -4736,30 +5159,28 @@ function renderMobDashboard(){
    MOBILE — Formulario Nuevo Registro
 ═══════════════════════════════════════════════════════ */
 function initMobForm(){
-  // Fecha por defecto
-  const fd = document.getElementById('mf-fecha');
-  if(fd && !fd.value) fd.value = isoHoy();
-  // Hora por defecto
-  const fh = document.getElementById('mf-hora');
-  if(fh) fh.value = '07:00';
-  const fhfin = document.getElementById('mf-hora-fin');
-  if(fhfin) fhfin.value = '17:36';
-  // Cargar ss
-  ssLoad('mf-area', DB.maestros.areas.map?DB.maestros.areas : []);
+  // Cargar maestros en los ss
+  ssLoad('mf-area', DB.maestros.areas.map?DB.maestros.areas:[]);
   ssLoad('mf-resp', (DB.maestros.responsables||[]).map(r=>typeof r==='string'?r:(r.nombreCorto||r.nombres||'')).filter(Boolean));
   ssLoad('mf-act', (DB.maestros.actividades||[]).map(a=>typeof a==='string'?a:(a.actividad||'')).filter(Boolean));
   ssLoad('mf-contratista', (DB.maestros.contratas||[]).map(c=>typeof c==='string'?c:(c.nombreCorto||c.razon||'')).filter(Boolean));
-  // Sub header
   const sub = document.getElementById('mob-form-fecha-sub');
   if(sub) sub.textContent = fechaLarga();
-  // Lotes
-  mobLotes = [];
-  renderMobLotesBtn();
-  renderMobLotesDD();
+  // Intentar restaurar draft; si no hay, inicializar vacío
+  const hasDraft = loadDraft('mf');
+  if(!hasDraft){
+    const fd=document.getElementById('mf-fecha'); if(fd) fd.value=isoHoy();
+    const fh=document.getElementById('mf-hora'); if(fh) fh.value='';
+    const fhfin=document.getElementById('mf-hora-fin'); if(fhfin) fhfin.value='';
+    ['mf-area','mf-resp','mf-act','mf-contratista'].forEach(id=>ssReset(id));
+    const mfTipo=document.getElementById('mf-tipo'); if(mfTipo) mfTipo.value='';
+    toggleMobContratista();
+    ssmReset('mf-lotes');
+  }
 }
 
-function toggleMobContratista(){
-  const tipo = document.getElementById('mf-tipo')?.value;
+function toggleMobContratista(tipo_val){
+  const tipo = tipo_val || document.getElementById('mf-tipo')?.value;
   const field = document.getElementById('mfield-contratista');
   if(field) field.style.display = tipo==='Contrata' ? '' : 'none';
   if(tipo!=='Contrata') ssReset('mf-contratista');
@@ -4823,32 +5244,50 @@ async function guardarRegistroMob(){
   const hora = document.getElementById('mf-hora').value;
   const horaFin = document.getElementById('mf-hora-fin')?.value||'';
   const tarea = document.getElementById('mf-tarea')?.value.trim()||'';
+  const turno = document.getElementById('mf-turno')?.value||'';
   const obs = document.getElementById('mf-obs').value.trim();
   const errEl = document.getElementById('mf-err');
   const okEl = document.getElementById('mf-ok');
   errEl.classList.remove('show'); okEl.classList.remove('show');
-  if(!area||!resp||!tipo||!act||!np||!hora||!mobLotes.length){
-    document.getElementById('mf-err-t').textContent='Completa todos los campos y selecciona al menos un lote.';
-    errEl.classList.add('show'); return;
+  const valMob = [
+    [!fecha,          'Selecciona una fecha.'],
+    [!area,           'Selecciona un Área.'],
+    [!resp,           'Selecciona un Responsable.'],
+    [!tipo,           'Selecciona el Tipo de personal.'],
+    [tipo==='Contrata'&&!contratista, 'Selecciona el Contratista.'],
+    [!act,            'Selecciona una Actividad.'],
+    [!np||np<=0,      'Ingresa el N° de personas.'],
+    [!hora,           'Selecciona la Hora de inicio.'],
+    [!horaFin,        'Selecciona la Hora de término.'],
+    [!(SSM_SEL['mf-lotes']?.size), 'Selecciona al menos un lote.'],
+  ];
+  const errMob = valMob.find(([cond])=>cond);
+  if(errMob){
+    document.getElementById('mf-err-t').textContent = errMob[1];
+    errEl.classList.add('show');
+    errEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+    return;
   }
-  const lotesStr = mobLotes.join(', ');
-  const reg = {fecha,hora,horaFin,area,responsable:resp,lotes:lotesStr,tipo,contratista:tipo==='Contrata'?contratista:'',actividad:act,tarea,nPersonas:np,obs,registradoPor:S.usuario?.nombre||'',timestamp:new Date().toISOString()};
+  const lotesStr = ssmGetSelected('mf-lotes');
+  const reg = {fecha,hora,horaFin,area,responsable:resp,lotes:lotesStr,tipo,contratista:tipo==='Contrata'?contratista:'',actividad:act,tarea,turno,nPersonas:np,obs,registradoPor:S.usuario?.nombre||'',timestamp:new Date().toISOString()};
   const btn = document.getElementById('mob-btn-guardar');
   btn.disabled = true; btn.textContent = 'Guardando…';
   try{
     await enviarASheets(reg);
     S.registros.push(reg);
     save();
+    clearDraft('mf');
     okEl.classList.add('show');
     // Reset form
     document.getElementById('mf-np').value='';
     document.getElementById('mf-tarea').value='';
     document.getElementById('mf-obs').value='';
     ['mf-area','mf-resp','mf-act','mf-contratista'].forEach(id=>ssReset(id));
+    ['mf-tipo','mf-turno'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.querySelectorAll('#mf-tipo-group .btn-toggle').forEach(b=>b.classList.remove('active'));
     document.getElementById('mf-tipo').value='';
     toggleMobContratista();
-    mobLotes=[];
-    renderMobLotesBtn(); renderMobLotesTags();
+    ssmReset('mf-lotes');
     document.getElementById('mob-lotes-dropdown').style.display='none';
     setTimeout(()=>okEl.classList.remove('show'),4000);
   }catch(e){
